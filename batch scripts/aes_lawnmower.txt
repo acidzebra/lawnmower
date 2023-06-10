@@ -1,0 +1,102 @@
+python lawnmower.py Morrowind.esm AesAdGrass_VaComp.esp grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp AesAdGrass_VaComp_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesAdGrass_TRComp.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesAdGrass_TRComp_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesAdGrass_TRpComp.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesAdGrass_TRpComp_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py Morrowind.esm AesAdGrass_AC.esp grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp AesAdGrass_AC_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py Morrowind.esm AesAdGrass_AI.esp grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp AesAdGrass_AI_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py Morrowind.esm AesAdGrass_AL.esp grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp AesAdGrass_AL_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py Morrowind.esm AesAdGrass_BC.esp grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp AesAdGrass_BC_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py Morrowind.esm AesAdGrass_WG.esp grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp AesAdGrass_WG_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py Morrowind.esm AesGrass_GL.esp grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp AesGrass_GL_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py Bloodmoon.esm AesGrass_SV.esp grassout1.esp
+python lawnmower.py "Solstheim Tomb of The Snow Prince.esm" grassout1.esp AesGrass_SV_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesAdGrass_TR_AC.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesAdGrass_TR_AC_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesAdGrass_TR_AI.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesAdGrass_TR_AI_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesAdGrass_TR_AL.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesAdGrass_TR_AL_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesAdGrass_TR_BC.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesAdGrass_TR_BC_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesAdGrass_TR_WG.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesAdGrass_TR_WG_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesAdGrass_TRp_AC.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesAdGrass_TRp_AC_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesAdGrass_TRp_AI.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesAdGrass_TRp_AI_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesAdGrass_TRp_AL.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesAdGrass_TRp_AL_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesAdGrass_TRp_BC.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesAdGrass_TRp_BC_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesAdGrass_TRp_WG.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesAdGrass_TRp_WG_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesGrass_TR_GL.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesGrass_TR_GL_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesGrass_TR_SV.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesGrass_TR_SV_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesGrass_TRp_AT.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesGrass_TRp_AT_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesGrass_TRp_GL.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesGrass_TRp_GL_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm AesGrass_TRp_SV.ESP grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp AesGrass_TRp_SV_lawnmowered.esp
+del grassout1.esp
+
+
+

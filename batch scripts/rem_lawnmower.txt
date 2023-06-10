@@ -1,0 +1,67 @@
+REM python lawnmower.py Morrowind.esm Rem_AC.esp grassout1.esp
+REM python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp Rem_AC_lawnmowered.esp
+REM del grassout1.esp
+
+REM python lawnmower.py Morrowind.esm Rem_AI.esp grassout1.esp
+REM python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp Rem_AI_lawnmowered.esp
+REM del grassout1.esp
+
+REM python lawnmower.py Morrowind.esm Rem_AL.esp grassout1.esp
+REM python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp Rem_AL_lawnmowered.esp
+REM del grassout1.esp
+
+REM python lawnmower.py Morrowind.esm Rem_BC.esp grassout1.esp
+REM python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp Rem_BC_lawnmowered.esp
+REM del grassout1.esp
+
+REM python lawnmower.py Morrowind.esm Rem_GL.esp grassout1.esp
+REM python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp Rem_GL_lawnmowered.esp
+REM del grassout1.esp
+
+REM python lawnmower.py Morrowind.esm Rem_WG.esp grassout1.esp
+REM python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp Rem_WG_lawnmowered.esp
+REM del grassout1.esp
+
+REM python lawnmower.py TR_Mainland_21.esm Rem_AC_TR.esp grassout1.esp
+REM python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_AC_TR_lawnmowered.esp
+REM del grassout1.esp
+
+REM python lawnmower.py TR_Mainland_21.esm Rem_AI_TR.esp grassout1.esp
+REM python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_AI_TR_lawnmowered.esp
+REM del grassout1.esp
+
+REM python lawnmower.py TR_Mainland_21.esm Rem_AL_TR.esp grassout1.esp
+REM python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_AL_TR_lawnmowered.esp
+REM del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm Rem_AT_TR.esp grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_AT_TR_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm Rem_BC_TR.esp grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_BC_TR_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm Rem_GL_TR.esp grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_GL_TR_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm Rem_RR_TR.esp grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_RR_TR_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm Rem_TR_AT.esp grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_TR_AT_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm Rem_VM_TR.esp grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_VM_TR_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py TR_Mainland_21.esm Rem_WG_TR.esp grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_WG_TR_lawnmowered.esp
+del grassout1.esp
+
+python lawnmower.py Bloodmoon.esm Rem_Solstheim.esp grassout1.esp
+python lawnmower.py "Solstheim Tomb of The Snow Prince.esm" grassout1.esp Rem_Solstheim_lawnmowered.esp
+del grassout1.esp

@@ -1,0 +1,19 @@
+python lawnmower.py Morrowind.esm "Vurt's Corals.esp" grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp "Vurt's Corals_lawnmowered.esp"
+del grassout1.esp
+
+python lawnmower.py Morrowind.esm "Vurt's Groundcover - BC, AI, WG, GL.esp" grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp "Vurt's Groundcover - BC, AI, WG, GL_lawnmowered.esp"
+del grassout1.esp
+
+python lawnmower.py Morrowind.esm "Vurt's Groundcover - Reeds.esp" grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp "Vurt's Groundcover - Reeds_lawnmowered.esp"
+del grassout1.esp
+
+python lawnmower.py Morrowind.esm "Vurt's Groundcover - The Ashlands.esp" grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp "Vurt's Groundcover - The Ashlands_lawnmowered.esp"
+del grassout1.esp
+
+python lawnmower.py Bloodmoon.esm "Vurt's Groundcover - Solstheim.esp" grassout1.esp
+python lawnmower.py "Solstheim Tomb of The Snow Prince.esm" grassout1.esp "Vurt's Groundcover - Solstheim_lawnmowered.esp"
+del grassout1.esp
