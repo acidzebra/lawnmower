@@ -14,9 +14,11 @@ Lawnmower for Morrowind will clean grassmods faster, better, and more consistent
 
 Lawnmower will take an input esp/esm file, a grass mod, and an output file as commandline arguments. It will compare them and if there is any clipping detected, it will move the grass out of sight. The new grass file will have almost no clipping, guaranteed (or your money back). You can chain commands in a batch file to process multiple masters and mods:
 
-python lawnmower.py "Morrowind.esm" "mygrassmod.esp" "grassout1.esp"
-python lawnmower.py "Vivec_Lighthouse.ESP" "grassout1.esp" "grassout2.esp"
-python lawnmower.py "Beautiful cities of morrowind.esp" "grassout2.esp" "shinynewnoclipgrassplugin.esp"
+`python lawnmower.py "Morrowind.esm" "mygrassmod.esp" "grassout1.esp"`
+
+`python lawnmower.py "Vivec_Lighthouse.ESP" "grassout1.esp" "grassout2.esp"`
+
+`python lawnmower.py "Beautiful cities of morrowind.esp" "grassout2.esp" "shinynewnoclipgrassplugin.esp"`
 
 The above would take your grassmod, compare it against morrowind.esm, vivec lighthouse, and bcom, remove any grass that clips with any object in those three mods, and saves the output to shinynewnoclipgrassplugin.esp
 If you want, you can set the grassmod and output file to the same filename, e.g. "Morrowind.esm" "mygrassmod.esp" "mygrassmod.esp" will update your grassmod with the latest cuts.
@@ -27,7 +29,7 @@ Program speed depends on grass mod size and amount of objects in target mod file
 
 Weedwhacker code was based on lawnmower. It will take a grass mod and a number between 1-99 as input, and will move a corresponding percentage of grass objects out of sight, effectively thinning it out by 1-99%. If you like a grass mod but think there's too much grass and don't want to regenerate the whole thing, this will quickly thin out the grass for you.
 
-python weedwhacker.py "mygrassmod.esp" "myfiftypercentreducedgrassmod" 50
+`python weedwhacker.py "mygrassmod.esp" "myfiftypercentreducedgrassmod" 50`
 
 This command will go through every cell of mygrassmod.esp, remove 50% of grass randomly (dice roll for each grass object found), and save the output to myfiftypercentreducedgrassmod.esp
 
@@ -39,7 +41,7 @@ Program speed: very fast
 
 This can fix floating grass and speed up creating patches - example: you have your favorite grassmod but use BCOM and have some floating grass. You then run https://www.nexusmods.com/morrowind/mods/23065mesh generator to generate a new grass file with only the BCOM esp as input. Grassclipper can now combine the grassmods for you:
 
-python grassclipper.py "myfavoritegrassmod.esp" "mynewlygeneratedtinygrasspatch.esp" "combinedgrassmod.esp"
+`python grassclipper.py "myfavoritegrassmod.esp" "mynewlygeneratedtinygrasspatch.esp" "combinedgrassmod.esp"`
 
 
 Result: no more floating grass in BCOM areas with your favorite grass mod (I do recommend manual inspection and clean afterwards, but it will be much less painful). 
