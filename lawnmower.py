@@ -1,5 +1,5 @@
 # The LawnMower for Morrowind
-version = "1.2"
+version = "1.3"
 #
 # automatically clean all clipping grass from your Morrowind grass mods, no more grass sticking through floors and other places it doesn't belong.
 # it is a little rough and there is very little handholding or much in the way of sanity checks. But it works.
@@ -12,6 +12,7 @@ version = "1.2"
 # 1.0 - IT WORKS
 # 1.1 - code is faster, simpler, cleaner, with extra guard rails
 # 1.2 - removed leftover debug stuff, fixed radius select loop
+# 1.3 - further simplification, reduced amount of stuff to evaluate during loops
 
 # START OF USER-CONFIGURABLE STUFF
 
@@ -84,6 +85,7 @@ try:
     modfile_contents = f.read()
     modfile_parsed_json = json.loads(modfile_contents) 
     f.close()
+    modfile_contents = ""
     if deletemodjson:
         os.remove(jsonmodname)
 except Exception as e:
@@ -101,6 +103,7 @@ try:
     grassfile_contents = f.read()
     grassfile_parsed_json = json.loads(grassfile_contents)
     f.close()
+    grassfile_contents = ""
     os.remove("tempgrass.json")
 except Exception as e:
     print("FATAL: unable to convert grassfile to json: "+repr(e))
@@ -123,15 +126,16 @@ for keys in grassfile_parsed_json:
     if keys["type"] != "Cell":
         exportfile.append(keys)
         exported = True
-    if keys["type"] == "Cell" and (keys["data"]["grid"][0] > 512 or keys["data"]["grid"][1] > 512) and not exported:
+    elif (keys["data"]["grid"][0] > 512 or keys["data"]["grid"][1] > 512):
         exportfile.append(keys)
         exported = True
-    if keys["type"] == "Cell" and (keys["data"]["grid"][0] <= 512 and keys["data"]["grid"][1] <= 512) and not exported:
+    elif len(keys["references"])>0:
         extcellcount+=1
         for comparekeys in modfile_parsed_json:
             if comparekeys["type"] == "Cell":
-                if comparekeys["data"]["grid"] == keys["data"]["grid"]:
-                    print(grassinputfile,modinputfile,"matched cell",str(keys["data"]["grid"]),"'"+str(keys["id"])+"', examining refs")
+                if len(comparekeys["references"])>0 and comparekeys["data"]["grid"] == keys["data"]["grid"]:
+                    if moreinfo:
+                        print(grassinputfile,modinputfile,"matched cell",str(keys["data"]["grid"]),", examining refs")
                     matchcellcount+=1
                     for refs in keys["references"]:
                         grasstotalcount+=1
@@ -140,31 +144,31 @@ for keys in grassfile_parsed_json:
                                 checkthismesh = comparerefs["id"].casefold()
                                 matchitem = False
                                 for items in skiplist:
-                                    if items in checkthismesh and not matchitem:
+                                    if items in checkthismesh:
                                         skipitem = True
                                         matchitem = True
                                 if not matchitem:
                                     for items in smalllist:
-                                        if items in checkthismesh and not matchitem:
+                                        if items in checkthismesh:
                                             radius = smallradius
                                             matchitem = True
                                 if not matchitem:            
                                     for items in largelist:
-                                        if items in checkthismesh and not matchitem:
+                                        if items in checkthismesh:
                                             radius = largeradius
                                             matchitem = True
                                 if not matchitem:  
                                     for items in mediumlist:
-                                        if items in checkthismesh and not matchitem:
+                                        if items in checkthismesh:
                                             radius = mediumradius
                                             matchitem = True
                                 if not matchitem:  
                                     for items in xllist:
-                                        if items in checkthismesh and not matchitem:
+                                        if items in checkthismesh:
                                             radius = xlradius
                                             matchitem = True
                                 matchitem = False
-                                if is_clipping(comparerefs["translation"][0],comparerefs["translation"][1],radius,refs["translation"][0],refs["translation"][1]) and not skipitem and refs["translation"][2] != -200000:
+                                if refs["translation"][2] != -200000 and not skipitem and is_clipping(comparerefs["translation"][0],comparerefs["translation"][1],radius,refs["translation"][0],refs["translation"][1]):
                                     refs["translation"][0] = 0
                                     refs["translation"][1] = 0
                                     refs["translation"][2] = -200000
