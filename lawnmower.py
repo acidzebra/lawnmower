@@ -1,5 +1,5 @@
 # The LawnMower for Morrowind
-version = "1.3.1"
+version = "1.3.2"
 #
 # automatically clean all clipping grass from your Morrowind grass mods, no more grass sticking through floors and other places it doesn't belong.
 # it is a little rough and there is very little handholding or much in the way of sanity checks. But it works.
@@ -14,6 +14,7 @@ version = "1.3.1"
 # 1.2 - removed leftover debug stuff, fixed radius select loop
 # 1.3 - further simplification, reduced amount of stuff to evaluate during loops
 # 1.3.1 - minor radius list additions, minor reduced lookups, minor loop changes
+# 1.3.2 - since I can't seem to fix the item matching stuff, added breaks
 
 # START OF USER-CONFIGURABLE STUFF
 
@@ -137,7 +138,7 @@ for keys in grassfile_parsed_json:
                 grasscell = keys["data"]["grid"]
                 if len(comparekeys["references"])>0 and comparekeys["data"]["grid"] == grasscell:
                     if moreinfo:
-                        print(grassinputfile,modinputfile,"matched cell",str(grasscell),", examining refs")
+                        print(grassinputfile,modinputfile,"matched cell",str(grasscell))
                     matchcellcount+=1
                     for refs in keys["references"]:
                         grasstotalcount+=1
@@ -149,29 +150,39 @@ for keys in grassfile_parsed_json:
                                 checkthismesh = comparerefs["id"].casefold()
                                 matchitem = False
                                 for items in skiplist:
-                                    if not matchitem and items in checkthismesh:
+                                    if items in checkthismesh:
                                         skipitem = True
                                         matchitem = True
+                                    if matchitem:
+                                        break
                                 if not matchitem:
                                     for items in smalllist:
-                                        if not matchitem and items in checkthismesh:
+                                        if items in checkthismesh:
                                             radius = smallradius
                                             matchitem = True
+                                        if matchitem:
+                                            break
                                 if not matchitem:            
                                     for items in largelist:
-                                        if not matchitem and items in checkthismesh:
+                                        if items in checkthismesh:
                                             radius = largeradius
                                             matchitem = True
+                                        if matchitem:
+                                            break
                                 if not matchitem:  
                                     for items in mediumlist:
-                                        if not matchitem and items in checkthismesh:
+                                        if items in checkthismesh:
                                             radius = mediumradius
                                             matchitem = True
+                                        if matchitem:
+                                            break
                                 if not matchitem:  
                                     for items in xllist:
-                                        if not matchitem and items in checkthismesh:
+                                        if items in checkthismesh:
                                             radius = xlradius
                                             matchitem = True
+                                        if matchitem:
+                                            break
                                 matchitem = False
                                 if not alreadymoved and not skipitem and is_clipping(comparerefs["translation"][0],comparerefs["translation"][1],radius,refs["translation"][0],refs["translation"][1]):
                                     refs["translation"][0] = 0
