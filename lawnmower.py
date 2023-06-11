@@ -1,5 +1,5 @@
 # The LawnMower for Morrowind
-version = "1.3.4"
+version = "1.4"
 #
 # automatically clean all clipping grass from your Morrowind grass mods, no more grass sticking through floors and other places it doesn't belong.
 # it is a little rough and there is very little handholding or much in the way of sanity checks. But it works.
@@ -11,12 +11,13 @@ version = "1.3.4"
 # 0.1-0.9 - various experiments to get this thing working
 # 1.0 - IT WORKS
 # 1.1 - code is faster, simpler, cleaner, with extra guard rails
-# 1.2 - removed leftover debugradiuslist stuff, fixed radius select loop
+# 1.2 - removed leftover debug stuff, fixed radius select loop
 # 1.3 - further simplification, reduced amount of stuff to evaluate during loops
 # 1.3.1 - minor radius list additions, minor reduced lookups, minor loop changes
 # 1.3.2 - since I can't seem to fix the item matching stuff, added breaks to speed up exiting loops, so ugly ;_;
 # 1.3.3 - reviewed the radius control lists and added debugradiuslist mode for same, added bunch of statics to lists
-# 1.3.4 - added nograss_xxl for easier city cleaning, minor adjustments to radius control (reverted some rocks, added some more objects)
+# 1.3.4 - added nograss_xxl for easier city cleaning, minor adjustments to radius control (reverted some rocks, added some more objects), added autoclean ESP for vanilla
+# 1.4 - rollup of the above stuff for release
 
 # START OF USER-CONFIGURABLE STUFF
 
@@ -24,7 +25,7 @@ version = "1.3.4"
 moreinfo = True
 # delete the mod .json file after generation? Default True, set to False to speed up batch operations (will be reused). 
 # DON'T FORGET TO TURN THIS OFF IF YOU'VE MADE CHANGES TO A MOD IN BETWEEN RUNNING LAWNMOWER.
-deletemodjson = False
+deletemodjson = True
 # radius to cut grass around mesh if no overrides on basis of refID, default 220.00
 defaultradius = 220.00
 # scale to use if no scale indicator present in the ref record, default 1
@@ -32,8 +33,8 @@ defaultscale = 1
 # use the ingame scaling of the ref to help determine radius to cut grass in; default false, don't think it looks great. Maybe could work with scale = scale + (refscale/somenumber)?
 userefscale = False
 
-# radius control
-skiplist = ["bridge","invis","collis","smoke","log","wreck","ship","boat","light_de","sound","teleport","trigger","thiefdoor","_ward_","steam","beartrap","marker","fauna","fx","forcefield","scrib","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk","terrain_rock_wg_06","terrain_rock_wg_04","terrain_rock_wg_11","terrain_rock_wg_13"]
+# radius control, the more things in these lists, the slower things go
+skiplist = ["bridge","invis","collis","smoke","log","wreck","ship","boat","plank","light_de","sound","teleport","trigger","thiefdoor","_ward_","steam","beartrap","marker","fauna","fx","forcefield","scrib","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk","terrain_rock_wg_06","terrain_rock_wg_04","terrain_rock_wg_11","terrain_rock_wg_13"]
 smalllist = ["tree","parasol","railing","flora","dwrv_block","rubble","nograss_small","plant","pole","furn_de_","lamp","lantern","torch","hook","rings","scrapwood","barnac"]
 smallradius = 120.00
 largelist = ["strongh","pylon","portal","ex_velothi","entrance","_talker","entr_","terrwater","necrom","temple","fort","doomstone","lava","canton","altar","palace","tower","_keep","fire","tent","statue","nograss_large","striderport","bcom_gnisis_rock","terrain_rock_wg_09","terrain_rock_wg_10","terrain_rock_wg_12"]
