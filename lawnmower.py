@@ -1,5 +1,5 @@
 # The LawnMower for Morrowind
-version = "1.3.2"
+version = "1.3.3"
 #
 # automatically clean all clipping grass from your Morrowind grass mods, no more grass sticking through floors and other places it doesn't belong.
 # it is a little rough and there is very little handholding or much in the way of sanity checks. But it works.
@@ -14,35 +14,37 @@ version = "1.3.2"
 # 1.2 - removed leftover debug stuff, fixed radius select loop
 # 1.3 - further simplification, reduced amount of stuff to evaluate during loops
 # 1.3.1 - minor radius list additions, minor reduced lookups, minor loop changes
-# 1.3.2 - since I can't seem to fix the item matching stuff, added breaks
+# 1.3.2 - since I can't seem to fix the item matching stuff, added breaks to speed up exiting loops, so ugly ;_;
+# 1.3.3 - reviewed the radius control lists and added debug mode for same, added bunch of statics to lists
 
 # START OF USER-CONFIGURABLE STUFF
 
 # moreinfo mode spits out more messages, defaults to True
 moreinfo = True
-# delete the mod .json file after generation? Default True, set to False to speed up batch operations (will be reused).
+# delete the mod .json file after generation? Default True, set to False to speed up batch operations (will be reused). 
+# DON'T FORGET TO TURN THIS OFF IF YOU'VE MADE CHANGES TO A MOD IN BETWEEN RUNNING LAWNMOWER.
 deletemodjson = False
-# radius to cut grass around mesh if no overrides on basis of refID, default 200.00
-defaultradius = 200.00
+# radius to cut grass around mesh if no overrides on basis of refID, default 220.00
+defaultradius = 220.00
 # scale to use if no scale indicator present in the ref record, default 1
 defaultscale = 1
 # use the ingame scaling of the ref to help determine radius to cut grass in; default false, don't think it looks great. Maybe could work with scale = scale + (refscale/somenumber)?
 userefscale = False
 
 # radius control
-skiplist = ["ruin","bridge","invis","collis","log","wreck","ship","boat","marker","fx","forcefield","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk"]
-smalllist = ["tree","parasol","railing","flora","dwrv_block","nograss_small"]
+skiplist = ["ruin","bridge","invis","collis","log","wreck","ship","boat","light_de","sound","teleport","_ward_","steam","beartrap","marker","fauna","fx","forcefield","scrib","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk","terrain_rock_wg_06","terrain_rock_wg_04","terrain_rock_wg_11","terrain_rock_wg_13"]
+smalllist = ["tree","parasol","railing","flora","dwrv_block","rubble","nograss_small","plant","pole","furn_de_"]
 smallradius = 120.00
-largelist = ["strongh","pylon","ex_velothi","entrance","entr_","terrwater","necrom","temple","fort","lava","canton","altar","palace","tower","_keep","fire","tent","statue","nograss_large","striderport"]
+largelist = ["strongh","pylon","portal","ex_velothi","entrance","_talker","entr_","terrwater","necrom","temple","fort","doomstone","lava","canton","altar","palace","tower","_keep","fire","tent","statue","nograss_large","striderport","bcom_gnisis_rock","terrain_rock_wg_09","terrain_rock_wg_10","terrain_rock_wg_12","terrain_rock_bc_18"]
 largeradius = 600.00
-mediumlist = ["ex_","house","building","shack","door","gate","_x_","well","stair","steps","bazaar","platform","tomb","exit","harbor","shrine","menhir","nograss_medium"]
+mediumlist = ["ex_","house","building","shack","door","gate","_x_","well","dae","stair","steps","bazaar","platform","tomb","exit","harbor","shrine","menhir","nograss_medium","pillar","terrain_rock_rm_12","terrain_rock_wg_05","terrain_rock_wg_07","terrain_rock_wg_08","terrain_rock_ac_10","terrain_rock_ac_11","terrain_rock_ac_12","terrain_rock_bc_07","terrain_rock_bc_09","terrain_rock_bc_16","_ranched"]
 mediumradius = 400.00
 xllist = ["nograss_xl"]
 xlradius = 1000.00
 
 ### END OF USER-CONFIGURABLE STUFF
 # I mean you could change stuff below too if you wanted and you're welcome to do so
-
+debug = False
 import json
 import io
 import sys
@@ -152,7 +154,10 @@ for keys in grassfile_parsed_json:
                                 for items in skiplist:
                                     if items in checkthismesh:
                                         skipitem = True
+                                        radius = 1
                                         matchitem = True
+                                        if debug:
+                                            print("skipitem",checkthismesh)
                                     if matchitem:
                                         break
                                 if not matchitem:
@@ -160,6 +165,8 @@ for keys in grassfile_parsed_json:
                                         if items in checkthismesh:
                                             radius = smallradius
                                             matchitem = True
+                                            if debug:
+                                                print("smalllist",checkthismesh)
                                         if matchitem:
                                             break
                                 if not matchitem:            
@@ -167,6 +174,8 @@ for keys in grassfile_parsed_json:
                                         if items in checkthismesh:
                                             radius = largeradius
                                             matchitem = True
+                                            if debug:
+                                                print("largelist",checkthismesh)
                                         if matchitem:
                                             break
                                 if not matchitem:  
@@ -174,6 +183,8 @@ for keys in grassfile_parsed_json:
                                         if items in checkthismesh:
                                             radius = mediumradius
                                             matchitem = True
+                                            if debug:
+                                                print("mediumlist",checkthismesh)
                                         if matchitem:
                                             break
                                 if not matchitem:  
@@ -181,9 +192,14 @@ for keys in grassfile_parsed_json:
                                         if items in checkthismesh:
                                             radius = xlradius
                                             matchitem = True
+                                            if debug:
+                                                print("xllist",checkthismesh)
                                         if matchitem:
                                             break
                                 matchitem = False
+                                if debug:
+                                    if radius == defaultradius:
+                                        print("default",checkthismesh)
                                 if not alreadymoved and not skipitem and is_clipping(comparerefs["translation"][0],comparerefs["translation"][1],radius,refs["translation"][0],refs["translation"][1]):
                                     refs["translation"][0] = 0
                                     refs["translation"][1] = 0
