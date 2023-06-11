@@ -18,7 +18,9 @@ Lawnmower will take an input esp/esm file, a grass mod, and an output file as co
 
 `python lawnmower.py "Vivec_Lighthouse.ESP" "grassout1.esp" "grassout2.esp"`
 
-`python lawnmower.py "Beautiful cities of morrowind.esp" "grassout2.esp" "shinynewnoclipgrassplugin.esp"`
+`python lawnmower.py "autoclean_cities_vanilla.esp" "grassout2.esp" "grassout3.esp"`  <---- NEW IN V1.4: CLEAN OUT ALL VANILLA CITIES AND OTHER DIFFICULT SPOTS AUTOMATICALLY WITH INCLUDED PATCH
+
+`python lawnmower.py "Beautiful cities of morrowind.esp" "grassout3.esp" "shinynewnoclipgrassplugin.esp"`
 
 The above would take your grassmod, compare it against morrowind.esm, vivec lighthouse, and bcom, remove any grass that clips with any object in those three mods, and saves the output to shinynewnoclipgrassplugin.esp
 If you want, you can set the grassmod and output file to the same filename, e.g. "Morrowind.esm" "mygrassmod.esp" "mygrassmod.esp" will update your grassmod with the latest cuts.
