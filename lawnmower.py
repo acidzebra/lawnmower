@@ -1,5 +1,5 @@
 # The LawnMower for Morrowind
-version = "1.3"
+version = "1.3.1"
 #
 # automatically clean all clipping grass from your Morrowind grass mods, no more grass sticking through floors and other places it doesn't belong.
 # it is a little rough and there is very little handholding or much in the way of sanity checks. But it works.
@@ -13,6 +13,7 @@ version = "1.3"
 # 1.1 - code is faster, simpler, cleaner, with extra guard rails
 # 1.2 - removed leftover debug stuff, fixed radius select loop
 # 1.3 - further simplification, reduced amount of stuff to evaluate during loops
+# 1.3.1 - minor radius list additions, minor reduced lookups, minor loop changes
 
 # START OF USER-CONFIGURABLE STUFF
 
@@ -29,12 +30,12 @@ userefscale = False
 
 # radius control
 skiplist = ["ruin","bridge","invis","collis","log","wreck","ship","boat","marker","fx","forcefield","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk"]
-smalllist = ["tree","parasol","railing","flora","nograss_small"]
+smalllist = ["tree","parasol","railing","flora","dwrv_block","nograss_small"]
 smallradius = 120.00
+largelist = ["strongh","pylon","ex_velothi","entrance","entr_","terrwater","necrom","temple","fort","lava","canton","altar","palace","tower","_keep","fire","tent","statue","nograss_large","striderport"]
+largeradius = 600.00
 mediumlist = ["ex_","house","building","shack","door","gate","_x_","well","stair","steps","bazaar","platform","tomb","exit","harbor","shrine","menhir","nograss_medium"]
 mediumradius = 400.00
-largelist = ["strongh","pylon","ex_velothi","entrance","entr_","terrwater","necrom","temple","fort","lava","canton","altar","palace","tower","_keep","fire","tent","statue","nograss_large"]
-largeradius = 600.00
 xllist = ["nograss_xl"]
 xlradius = 1000.00
 
@@ -133,42 +134,46 @@ for keys in grassfile_parsed_json:
         extcellcount+=1
         for comparekeys in modfile_parsed_json:
             if comparekeys["type"] == "Cell":
-                if len(comparekeys["references"])>0 and comparekeys["data"]["grid"] == keys["data"]["grid"]:
+                grasscell = keys["data"]["grid"]
+                if len(comparekeys["references"])>0 and comparekeys["data"]["grid"] == grasscell:
                     if moreinfo:
-                        print(grassinputfile,modinputfile,"matched cell",str(keys["data"]["grid"]),", examining refs")
+                        print(grassinputfile,modinputfile,"matched cell",str(grasscell),", examining refs")
                     matchcellcount+=1
                     for refs in keys["references"]:
                         grasstotalcount+=1
-                        if refs["translation"][2] != -200000:
+                        alreadymoved = False
+                        if refs["translation"][2] == -200000:
+                            alreadymoved = True
+                        if not alreadymoved:
                             for comparerefs in comparekeys["references"]:
                                 checkthismesh = comparerefs["id"].casefold()
                                 matchitem = False
                                 for items in skiplist:
-                                    if items in checkthismesh:
+                                    if not matchitem and items in checkthismesh:
                                         skipitem = True
                                         matchitem = True
                                 if not matchitem:
                                     for items in smalllist:
-                                        if items in checkthismesh:
+                                        if not matchitem and items in checkthismesh:
                                             radius = smallradius
                                             matchitem = True
                                 if not matchitem:            
                                     for items in largelist:
-                                        if items in checkthismesh:
+                                        if not matchitem and items in checkthismesh:
                                             radius = largeradius
                                             matchitem = True
                                 if not matchitem:  
                                     for items in mediumlist:
-                                        if items in checkthismesh:
+                                        if not matchitem and items in checkthismesh:
                                             radius = mediumradius
                                             matchitem = True
                                 if not matchitem:  
                                     for items in xllist:
-                                        if items in checkthismesh:
+                                        if not matchitem and items in checkthismesh:
                                             radius = xlradius
                                             matchitem = True
                                 matchitem = False
-                                if refs["translation"][2] != -200000 and not skipitem and is_clipping(comparerefs["translation"][0],comparerefs["translation"][1],radius,refs["translation"][0],refs["translation"][1]):
+                                if not alreadymoved and not skipitem and is_clipping(comparerefs["translation"][0],comparerefs["translation"][1],radius,refs["translation"][0],refs["translation"][1]):
                                     refs["translation"][0] = 0
                                     refs["translation"][1] = 0
                                     refs["translation"][2] = -200000
