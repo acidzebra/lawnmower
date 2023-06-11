@@ -1,5 +1,5 @@
 # The LawnMower for Morrowind
-version = "1.3.3"
+version = "1.3.4"
 #
 # automatically clean all clipping grass from your Morrowind grass mods, no more grass sticking through floors and other places it doesn't belong.
 # it is a little rough and there is very little handholding or much in the way of sanity checks. But it works.
@@ -11,11 +11,12 @@ version = "1.3.3"
 # 0.1-0.9 - various experiments to get this thing working
 # 1.0 - IT WORKS
 # 1.1 - code is faster, simpler, cleaner, with extra guard rails
-# 1.2 - removed leftover debug stuff, fixed radius select loop
+# 1.2 - removed leftover debugradiuslist stuff, fixed radius select loop
 # 1.3 - further simplification, reduced amount of stuff to evaluate during loops
 # 1.3.1 - minor radius list additions, minor reduced lookups, minor loop changes
 # 1.3.2 - since I can't seem to fix the item matching stuff, added breaks to speed up exiting loops, so ugly ;_;
-# 1.3.3 - reviewed the radius control lists and added debug mode for same, added bunch of statics to lists
+# 1.3.3 - reviewed the radius control lists and added debugradiuslist mode for same, added bunch of statics to lists
+# 1.3.4 - added nograss_xxl for easier city cleaning, minor adjustments to radius control (reverted some rocks, added some more objects)
 
 # START OF USER-CONFIGURABLE STUFF
 
@@ -32,19 +33,21 @@ defaultscale = 1
 userefscale = False
 
 # radius control
-skiplist = ["ruin","bridge","invis","collis","log","wreck","ship","boat","light_de","sound","teleport","_ward_","steam","beartrap","marker","fauna","fx","forcefield","scrib","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk","terrain_rock_wg_06","terrain_rock_wg_04","terrain_rock_wg_11","terrain_rock_wg_13"]
-smalllist = ["tree","parasol","railing","flora","dwrv_block","rubble","nograss_small","plant","pole","furn_de_"]
+skiplist = ["bridge","invis","collis","smoke","log","wreck","ship","boat","light_de","sound","teleport","trigger","thiefdoor","_ward_","steam","beartrap","marker","fauna","fx","forcefield","scrib","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk","terrain_rock_wg_06","terrain_rock_wg_04","terrain_rock_wg_11","terrain_rock_wg_13"]
+smalllist = ["tree","parasol","railing","flora","dwrv_block","rubble","nograss_small","plant","pole","furn_de_","lamp","lantern","torch","hook","rings","scrapwood","barnac"]
 smallradius = 120.00
-largelist = ["strongh","pylon","portal","ex_velothi","entrance","_talker","entr_","terrwater","necrom","temple","fort","doomstone","lava","canton","altar","palace","tower","_keep","fire","tent","statue","nograss_large","striderport","bcom_gnisis_rock","terrain_rock_wg_09","terrain_rock_wg_10","terrain_rock_wg_12","terrain_rock_bc_18"]
+largelist = ["strongh","pylon","portal","ex_velothi","entrance","_talker","entr_","terrwater","necrom","temple","fort","doomstone","lava","canton","altar","palace","tower","_keep","fire","tent","statue","nograss_large","striderport","bcom_gnisis_rock","terrain_rock_wg_09","terrain_rock_wg_10","terrain_rock_wg_12"]
 largeradius = 600.00
-mediumlist = ["ex_","house","building","shack","door","gate","_x_","well","dae","stair","steps","bazaar","platform","tomb","exit","harbor","shrine","menhir","nograss_medium","pillar","terrain_rock_rm_12","terrain_rock_wg_05","terrain_rock_wg_07","terrain_rock_wg_08","terrain_rock_ac_10","terrain_rock_ac_11","terrain_rock_ac_12","terrain_rock_bc_07","terrain_rock_bc_09","terrain_rock_bc_16","_ranched"]
+mediumlist = ["ex_","house","building","shack","ruin","bw_hlaal","door","_d_","docks","gate","grate","waterfall","_x_","well","dae","stair","steps","bazaar","platf","tomb","exit","harbor","shrine","menhir","nograss_medium","pillar","terrain_rock_rm_12","terrain_rock_wg_05","terrain_rock_wg_07","terrain_rock_wg_08","terrain_rock_ac_10","terrain_rock_ac_11","terrain_rock_ac_12","_ranched"]
 mediumradius = 400.00
 xllist = ["nograss_xl"]
 xlradius = 1000.00
+xxllist = ["nograss_xxl"]
+xxlradius = 2000.00
 
 ### END OF USER-CONFIGURABLE STUFF
 # I mean you could change stuff below too if you wanted and you're welcome to do so
-debug = False
+debugradiuslist = False
 import json
 import io
 import sys
@@ -156,7 +159,7 @@ for keys in grassfile_parsed_json:
                                         skipitem = True
                                         radius = 1
                                         matchitem = True
-                                        if debug:
+                                        if debugradiuslist:
                                             print("skipitem",checkthismesh)
                                     if matchitem:
                                         break
@@ -165,7 +168,7 @@ for keys in grassfile_parsed_json:
                                         if items in checkthismesh:
                                             radius = smallradius
                                             matchitem = True
-                                            if debug:
+                                            if debugradiuslist:
                                                 print("smalllist",checkthismesh)
                                         if matchitem:
                                             break
@@ -174,7 +177,7 @@ for keys in grassfile_parsed_json:
                                         if items in checkthismesh:
                                             radius = largeradius
                                             matchitem = True
-                                            if debug:
+                                            if debugradiuslist:
                                                 print("largelist",checkthismesh)
                                         if matchitem:
                                             break
@@ -183,7 +186,7 @@ for keys in grassfile_parsed_json:
                                         if items in checkthismesh:
                                             radius = mediumradius
                                             matchitem = True
-                                            if debug:
+                                            if debugradiuslist:
                                                 print("mediumlist",checkthismesh)
                                         if matchitem:
                                             break
@@ -192,12 +195,21 @@ for keys in grassfile_parsed_json:
                                         if items in checkthismesh:
                                             radius = xlradius
                                             matchitem = True
-                                            if debug:
+                                            if debugradiuslist:
                                                 print("xllist",checkthismesh)
                                         if matchitem:
                                             break
+                                if not matchitem:  
+                                    for items in xxllist:
+                                        if items in checkthismesh:
+                                            radius = xxlradius
+                                            matchitem = True
+                                            if debugradiuslist:
+                                                print("xxllist",checkthismesh)
+                                        if matchitem:
+                                            break
                                 matchitem = False
-                                if debug:
+                                if debugradiuslist:
                                     if radius == defaultradius:
                                         print("default",checkthismesh)
                                 if not alreadymoved and not skipitem and is_clipping(comparerefs["translation"][0],comparerefs["translation"][1],radius,refs["translation"][0],refs["translation"][1]):
