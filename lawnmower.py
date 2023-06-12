@@ -1,5 +1,5 @@
 # The LawnMower for Morrowind
-version = "1.4.1"
+version = "1.4.2"
 #
 # automatically clean all clipping grass from your Morrowind grass mods, no more grass sticking through floors and other places it doesn't belong.
 # it is a little rough and there is very little handholding or much in the way of sanity checks. But it works.
@@ -15,6 +15,7 @@ version = "1.4.1"
 # 1.3 - further simplification, reduced amount of stuff to evaluate during loops
 # 1.4 - refinement of radius lists, code cleanup and optimization, added nograss_xxl for easier city cleaning using grassblocker, added autoclean_cities_vanilla.esp for cleaning stuff in vanilla that lawnmower can't reach by itself
 # 1.4.1 - trimmed back lists a tiny bit, was getting out of hand (and increasing runtime for little extra benefit). Slight reorder of file loading to make error messages less vague, thinking of adding batch processing. Maybe in a separate script though.
+# 1.4.2 - rewrote ref lookup and saved many lines of code, removed scale stuff since it's pretty useless, now frees up memory after loading json files
 
 # START OF USER-CONFIGURABLE STUFF
 
@@ -25,37 +26,43 @@ moreinfo = True
 deletemodjson = True
 # radius to cut grass around mesh if no overrides on basis of refID, default 220.00
 defaultradius = 220.00
-# scale to use if no scale indicator present in the ref record, default 1
-defaultscale = 1
-# use the ingame scaling of the ref to help determine radius to cut grass in; default false, don't think it looks great. Maybe could work with scale = scale + (refscale/somenumber)?
-userefscale = False
+
 
 # radius control, the more things in these lists, the slower things go
 skiplist = ["bridge","invis","collis","smoke","log","wreck","ship","boat","plank","light_de","sound","teleport","trigger","thiefdoor","_ward_","steam","beartrap","marker","fauna","fx","forcefield","ranched","scrib","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk","terrain_rock_wg_06","terrain_rock_wg_04","terrain_rock_wg_11","terrain_rock_wg_13"]
 smalllist = ["tree","parasol","railing","flora","dwrv_block","rubble","nograss_small","plant","pole","furn"]
-smallradius = 120.00
 largelist = ["strongh","pylon","portal","ex_velothi","entrance","_talker","entr_","terrwater","necrom","temple","fort","doomstone","lava","canton","altar","palace","tower","_keep","fire","tent","statue","nograss_large","striderport","bcom_gnisis_rock","terrain_rock_wg_09","terrain_rock_wg_10","terrain_rock_wg_12"]
-largeradius = 600.00
 mediumlist = ["ex_","house","building","shack","ruin","bw_hlaal","door","_d_","docks","gate","grate","waterfall","_x_","well","dae","stair","steps","bazaar","platf","tomb","exit","harbor","shrine","menhir","nograss_medium","pillar","terrain_rock_rm_12","terrain_rock_wg_05","terrain_rock_wg_07","terrain_rock_wg_08","terrain_rock_ac_10","terrain_rock_ac_11","terrain_rock_ac_12"]
-mediumradius = 400.00
 xllist = ["nograss_xl"]
-xlradius = 1000.00
 xxllist = ["nograss_xxl"]
-xxlradius = 2000.00
+
+reftable = [skiplist,smalllist,largelist,mediumlist,xllist,xxllist]
+radiustable = [1,120,160,400,1000,2000]
+skiptable = [True,False,False,False,False,False]
+
 
 ### END OF USER-CONFIGURABLE STUFF
 # I mean you could change stuff below too if you wanted and you're welcome to do so
+
 debugradiuslist = False
+
 import json
 import io
 import sys
 import os
+import gc
 
 def is_clipping(circle_x, circle_y, rad, x, y):
     if ((x - circle_x) * (x - circle_x) + (y - circle_y) * (y - circle_y) <= rad * rad):
-        return True;
+        return True
     else:
-        return False;
+        return False
+
+def is_in_list(x, ls):
+    if any(word in x for word in ls):
+        return True
+    else:
+        return False
 
 try:
     modinputfile,grassinputfile,lwnmwroutputfile = sys.argv[1:]
@@ -94,7 +101,7 @@ f = io.open(jsonmodname, mode="r", encoding="utf-8")
 modfile_contents = f.read()
 modfile_parsed_json = json.loads(modfile_contents) 
 f.close()
-modfile_contents = ""
+del modfile_contents
 if deletemodjson:
     os.remove(jsonmodname)
 
@@ -113,15 +120,14 @@ f = io.open("tempgrass.json", mode="r", encoding="utf-8")
 grassfile_contents = f.read()
 grassfile_parsed_json = json.loads(grassfile_contents)
 f.close()
-grassfile_contents = ""
+del grassfile_contents
 os.remove("tempgrass.json")
-
+gc.collect()
     
 exportfile = []
 exported = False
 skipitem = False
 radius = defaultradius
-scale = defaultscale
 grasstotalcount = 0
 grasskillcount = 0
 grasskilltotalcount = 0
@@ -153,66 +159,22 @@ for keys in grassfile_parsed_json:
                             alreadymoved = True
                         if not alreadymoved:
                             for comparerefs in comparekeys["references"]:
-                                checkthismesh = comparerefs["id"].casefold()
+                                checkthismesh = str(comparerefs["id"].casefold())
                                 matchitem = False
-                                for items in skiplist:
-                                    if items in checkthismesh:
-                                        skipitem = True
-                                        radius = 1
+                                tablecount = 0
+                                for letsref in reftable:
+                                    if is_in_list(checkthismesh,reftable[tablecount]):
+                                        skipitem = skiptable[tablecount]
+                                        radius = radiustable[tablecount]
                                         matchitem = True
                                         if debugradiuslist:
-                                            print("skipitem",checkthismesh)
+                                            print(skipitem,radius, checkthismesh)
                                     if matchitem:
                                         break
-                                if not matchitem:
-                                    for items in smalllist:
-                                        if items in checkthismesh:
-                                            radius = smallradius
-                                            matchitem = True
-                                            if debugradiuslist:
-                                                print("smalllist",checkthismesh)
-                                        if matchitem:
-                                            break
-                                if not matchitem:            
-                                    for items in largelist:
-                                        if items in checkthismesh:
-                                            radius = largeradius
-                                            matchitem = True
-                                            if debugradiuslist:
-                                                print("largelist",checkthismesh)
-                                        if matchitem:
-                                            break
-                                if not matchitem:  
-                                    for items in mediumlist:
-                                        if items in checkthismesh:
-                                            radius = mediumradius
-                                            matchitem = True
-                                            if debugradiuslist:
-                                                print("mediumlist",checkthismesh)
-                                        if matchitem:
-                                            break
-                                if not matchitem:  
-                                    for items in xllist:
-                                        if items in checkthismesh:
-                                            radius = xlradius
-                                            matchitem = True
-                                            if debugradiuslist:
-                                                print("xllist",checkthismesh)
-                                        if matchitem:
-                                            break
-                                if not matchitem:  
-                                    for items in xxllist:
-                                        if items in checkthismesh:
-                                            radius = xxlradius
-                                            matchitem = True
-                                            if debugradiuslist:
-                                                print("xxllist",checkthismesh)
-                                        if matchitem:
-                                            break
-                                matchitem = False
-                                if debugradiuslist:
-                                    if radius == defaultradius:
-                                        print("default",checkthismesh)
+                                    tablecount+=1
+                                matchitem = False 
+                                skipitem = False
+                                radius = defaultradius
                                 if not alreadymoved and not skipitem and is_clipping(comparerefs["translation"][0],comparerefs["translation"][1],radius,refs["translation"][0],refs["translation"][1]):
                                     refs["translation"][0] = 0
                                     refs["translation"][1] = 0
@@ -220,7 +182,6 @@ for keys in grassfile_parsed_json:
                                     grasskillcount+=1
                                     grasskilltotalcount+=1
                                 skipitem = False
-                                scale = defaultscale
                                 radius = defaultradius
         exportfile.append(keys)
         exported = True
