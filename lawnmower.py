@@ -16,7 +16,7 @@ version = "1.4.2"
 # 1.4 - refinement of radius lists, code cleanup and optimization, added nograss_xxl for easier city cleaning using grassblocker, added autoclean_cities_vanilla.esp for cleaning stuff in vanilla that lawnmower can't reach by itself
 # 1.4.1 - trimmed back lists a tiny bit, was getting out of hand (and increasing runtime for little extra benefit). Slight reorder of file loading to make error messages less vague, thinking of adding batch processing. Maybe in a separate script though.
 # 1.4.2 - rewrote ref lookup and saved many lines of code, removed scale stuff since it's pretty useless, now frees up memory after loading json files
-
+# 1.4.3 - should probably not zero out skipitem before I use it, small code fix
 # START OF USER-CONFIGURABLE STUFF
 
 # moreinfo mode spits out more messages, defaults to True
@@ -27,8 +27,7 @@ deletemodjson = True
 # radius to cut grass around mesh if no overrides on basis of refID, default 220.00
 defaultradius = 220.00
 
-
-# radius control, the more things in these lists, the slower things go
+# radius control, the more things in these lists, the slower things go. This is a decent set and seems to catch vanilla/TR/OAAB stuff pretty well.
 skiplist = ["bridge","invis","collis","smoke","log","wreck","ship","boat","plank","light_de","sound","teleport","trigger","thiefdoor","_ward_","steam","beartrap","marker","fauna","fx","forcefield","ranched","scrib","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk","terrain_rock_wg_06","terrain_rock_wg_04","terrain_rock_wg_11","terrain_rock_wg_13"]
 smalllist = ["tree","parasol","railing","flora","dwrv_block","rubble","nograss_small","plant","pole","furn"]
 largelist = ["strongh","pylon","portal","ex_velothi","entrance","_talker","entr_","terrwater","necrom","temple","fort","doomstone","lava","canton","altar","palace","tower","_keep","fire","tent","statue","nograss_large","striderport","bcom_gnisis_rock","terrain_rock_wg_09","terrain_rock_wg_10","terrain_rock_wg_12"]
@@ -40,11 +39,11 @@ reftable = [skiplist,smalllist,largelist,mediumlist,xllist,xxllist]
 radiustable = [1,120,160,400,1000,2000]
 skiptable = [True,False,False,False,False,False]
 
+# if you want to see what decisions are made about refs, would recommend to pipe output to a text file
+debugradiuslist = False
 
 ### END OF USER-CONFIGURABLE STUFF
 # I mean you could change stuff below too if you wanted and you're welcome to do so
-
-debugradiuslist = False
 
 import json
 import io
@@ -122,6 +121,7 @@ grassfile_parsed_json = json.loads(grassfile_contents)
 f.close()
 del grassfile_contents
 os.remove("tempgrass.json")
+
 gc.collect()
     
 exportfile = []
@@ -173,8 +173,6 @@ for keys in grassfile_parsed_json:
                                         break
                                     tablecount+=1
                                 matchitem = False 
-                                skipitem = False
-                                radius = defaultradius
                                 if not alreadymoved and not skipitem and is_clipping(comparerefs["translation"][0],comparerefs["translation"][1],radius,refs["translation"][0],refs["translation"][1]):
                                     refs["translation"][0] = 0
                                     refs["translation"][1] = 0
