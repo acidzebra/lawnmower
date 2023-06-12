@@ -1,5 +1,5 @@
 # The LawnMower for Morrowind
-version = "1.4"
+version = "1.4.1"
 #
 # automatically clean all clipping grass from your Morrowind grass mods, no more grass sticking through floors and other places it doesn't belong.
 # it is a little rough and there is very little handholding or much in the way of sanity checks. But it works.
@@ -13,11 +13,8 @@ version = "1.4"
 # 1.1 - code is faster, simpler, cleaner, with extra guard rails
 # 1.2 - removed leftover debug stuff, fixed radius select loop
 # 1.3 - further simplification, reduced amount of stuff to evaluate during loops
-# 1.3.1 - minor radius list additions, minor reduced lookups, minor loop changes
-# 1.3.2 - since I can't seem to fix the item matching stuff, added breaks to speed up exiting loops, so ugly ;_;
-# 1.3.3 - reviewed the radius control lists and added debugradiuslist mode for same, added bunch of statics to lists
-# 1.3.4 - added nograss_xxl for easier city cleaning, minor adjustments to radius control (reverted some rocks, added some more objects), added autoclean ESP for vanilla
-# 1.4 - rollup of the above stuff for release
+# 1.4 - refinement of radius lists, code cleanup and optimization, added nograss_xxl for easier city cleaning using grassblocker, added autoclean_cities_vanilla.esp for cleaning stuff in vanilla that lawnmower can't reach by itself
+# 1.4.1 - trimmed back lists a tiny bit, was getting out of hand (and increasing runtime for little extra benefit). Slight reorder of file loading to make error messages less vague, thinking of adding batch processing. Maybe in a separate script though.
 
 # START OF USER-CONFIGURABLE STUFF
 
@@ -34,12 +31,12 @@ defaultscale = 1
 userefscale = False
 
 # radius control, the more things in these lists, the slower things go
-skiplist = ["bridge","invis","collis","smoke","log","wreck","ship","boat","plank","light_de","sound","teleport","trigger","thiefdoor","_ward_","steam","beartrap","marker","fauna","fx","forcefield","scrib","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk","terrain_rock_wg_06","terrain_rock_wg_04","terrain_rock_wg_11","terrain_rock_wg_13"]
-smalllist = ["tree","parasol","railing","flora","dwrv_block","rubble","nograss_small","plant","pole","furn_de_","lamp","lantern","torch","hook","rings","scrapwood","barnac"]
+skiplist = ["bridge","invis","collis","smoke","log","wreck","ship","boat","plank","light_de","sound","teleport","trigger","thiefdoor","_ward_","steam","beartrap","marker","fauna","fx","forcefield","ranched","scrib","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk","terrain_rock_wg_06","terrain_rock_wg_04","terrain_rock_wg_11","terrain_rock_wg_13"]
+smalllist = ["tree","parasol","railing","flora","dwrv_block","rubble","nograss_small","plant","pole","furn"]
 smallradius = 120.00
 largelist = ["strongh","pylon","portal","ex_velothi","entrance","_talker","entr_","terrwater","necrom","temple","fort","doomstone","lava","canton","altar","palace","tower","_keep","fire","tent","statue","nograss_large","striderport","bcom_gnisis_rock","terrain_rock_wg_09","terrain_rock_wg_10","terrain_rock_wg_12"]
 largeradius = 600.00
-mediumlist = ["ex_","house","building","shack","ruin","bw_hlaal","door","_d_","docks","gate","grate","waterfall","_x_","well","dae","stair","steps","bazaar","platf","tomb","exit","harbor","shrine","menhir","nograss_medium","pillar","terrain_rock_rm_12","terrain_rock_wg_05","terrain_rock_wg_07","terrain_rock_wg_08","terrain_rock_ac_10","terrain_rock_ac_11","terrain_rock_ac_12","_ranched"]
+mediumlist = ["ex_","house","building","shack","ruin","bw_hlaal","door","_d_","docks","gate","grate","waterfall","_x_","well","dae","stair","steps","bazaar","platf","tomb","exit","harbor","shrine","menhir","nograss_medium","pillar","terrain_rock_rm_12","terrain_rock_wg_05","terrain_rock_wg_07","terrain_rock_wg_08","terrain_rock_ac_10","terrain_rock_ac_11","terrain_rock_ac_12"]
 mediumradius = 400.00
 xllist = ["nograss_xl"]
 xlradius = 1000.00
@@ -80,42 +77,45 @@ if not os.path.isfile("tes3conv.exe"):
 
 print("Lawnmower for Morrowind",str(version)," by acidzebra: grass go brrrr")
 
-try:
-    jsonmodname = modinputfile[:-4]+".json"
-    if not os.path.isfile(str(jsonmodname)):
-        if moreinfo:
-            print("converting mod file to JSON...")
+jsonmodname = modinputfile[:-4]+".json"
+if not os.path.isfile(str(jsonmodname)):
+    if moreinfo:
+        print("converting mod file to JSON...")
+    try:
         target = "tes3conv.exe \""+str(modinputfile)+"\" \""+str(jsonmodname)+"\""
         os.system(target)
-    if moreinfo:
-        print("reading mod file JSON...")
-    f = io.open(jsonmodname, mode="r", encoding="utf-8")
-    modfile_contents = f.read()
-    modfile_parsed_json = json.loads(modfile_contents) 
-    f.close()
-    modfile_contents = ""
-    if deletemodjson:
-        os.remove(jsonmodname)
-except Exception as e:
-    print("FATAL: unable to convert mod to json: "+repr(e))
+    except Exception as e:
+        print("FATAL: unable to convert mod to json: "+repr(e)) 
+if not os.path.isfile(str(jsonmodname)):
     sys.exit()
+if moreinfo:
+    print("reading mod file JSON...")
+f = io.open(jsonmodname, mode="r", encoding="utf-8")
+modfile_contents = f.read()
+modfile_parsed_json = json.loads(modfile_contents) 
+f.close()
+modfile_contents = ""
+if deletemodjson:
+    os.remove(jsonmodname)
 
+if moreinfo:
+    print("converting grass file to JSON...")
 try:
-    if moreinfo:
-        print("converting grass file to JSON...")
     target = "tes3conv.exe \""+str(grassinputfile)+"\" tempgrass.json"
     os.system(target)
-    if moreinfo:
-        print("reading grass file JSON...")
-    f = io.open("tempgrass.json", mode="r", encoding="utf-8")
-    grassfile_contents = f.read()
-    grassfile_parsed_json = json.loads(grassfile_contents)
-    f.close()
-    grassfile_contents = ""
-    os.remove("tempgrass.json")
 except Exception as e:
     print("FATAL: unable to convert grassfile to json: "+repr(e))
+if not os.path.isfile("tempgrass.json"):
     sys.exit()
+if moreinfo:
+    print("reading grass file JSON...")
+f = io.open("tempgrass.json", mode="r", encoding="utf-8")
+grassfile_contents = f.read()
+grassfile_parsed_json = json.loads(grassfile_contents)
+f.close()
+grassfile_contents = ""
+os.remove("tempgrass.json")
+
     
 exportfile = []
 exported = False
