@@ -1,100 +1,78 @@
-REM Ascadian Isles
-python lawnmower.py Morrowind.esm GENERATED_Grass_AI.esp grassout1.esp
-python lawnmower.py Vivec_Lighthouse.ESP grassout1.esp grassout2.esp
-del grassout1.esp
-del newAI.esp
-python lawnmower.py "Beautiful cities of morrowind.esp" grassout2.esp grassout3.esp
-del grassout2.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout3.esp grassout4.esp
-del grassout3.esp
-python lawnmower.py "Clean_Mines & Caverns.esp" grassout4.esp grassout5.esp
-del grassout4.esp
-python lawnmower.py Concept_Arts_plantations.esp grassout5.esp newAI.esp
-del grassout5.esp
 
-REM Azura's Coast
-python lawnmower.py Morrowind.esm GENERATED_Grass_AC.esp grassout1.esp
-python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
+REM Tamriel Rebuilt - AC
+python lawnmower.py TR_Mainland.esm GENERATED_Grass_TR_AC.esp grassout1.esp
+del newTRAC.esp
+python lawnmower.py TR_merged_az.esm grassout1.esp grassout2.esp
 del grassout1.esp
-python lawnmower.py "OAAB Market.ESP" grassout2.esp grassout3.esp
-del grassout2.esp
-del newAC.esp
-python lawnmower.py "OAAB_Tel Mora.ESP" grassout3.esp grassout4.esp
-del grassout3.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout4.esp grassout5.esp
-del grassout4.esp
-python lawnmower.py "Clean_Mines & Caverns.esp" grassout5.esp newAC.esp
-del grassout5.esp
-
-REM Ashlands
-python lawnmower.py Morrowind.esm GENERATED_Grass_AL.esp grassout1.esp
-python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
-del grassout1.esp
-python lawnmower.py RedMountainReborn.esp grassout2.esp grassout3.esp
-del grassout2.esp
-python lawnmower.py "OAAB - Foyada Mamaea.ESP" grassout3.esp grassout4.esp
-del grassout3.esp
-python lawnmower.py Skar_face.ESP grassout4.esp grassout5.esp
-del grassout4.esp
-del newAL.esp
-python lawnmower.py "Baan_Binif.ESP" grassout5.esp grassout6.esp
-del grassout5.esp
-python lawnmower.py "Clean_Mines & Caverns.esp" grassout6.esp grassout7.esp
-del grassout6.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout7.esp newAL.esp
-del grassout7.esp
-
-REM Bitter Coast
-python lawnmower.py Morrowind.esm GENERATED_Grass_BC.esp grassout1.esp
-del newBC.esp
-python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
-del grassout1.esp
-python lawnmower.py "Clean_Mines & Caverns.esp" grassout2.esp grassout3.esp
-del grassout2.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout3.esp newBC.esp
-del grassout3.esp
-
-
-REM Grazelands
-python lawnmower.py Morrowind.esm GENERATED_Grass_GL.esp grassout1.esp
-python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
-del grassout1.esp
-python lawnmower.py OAAB_GoldenReeds.ESP grassout2.esp grassout3.esp
-del grassout2.esp
-python lawnmower.py OAAB_Grazelands.ESP grassout3.esp grassout4.esp
-del grassout3.esp
-del newGL.esp
-python lawnmower.py "Dunmer Stronghold - Falensarano V1.0.esp" grassout4.esp grassout5.esp
-del grassout4.esp
-python lawnmower.py "Clean_Mines & Caverns.esp" grassout5.esp grassout6.esp
-del grassout5.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout6.esp newGL.esp
-del grassout6.esp
-
-REM West Gash
-python lawnmower.py Morrowind.esm GENERATED_Grass_WG.esp grassout1.esp
-python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
-del grassout1.esp
-del newWG.esp
-python lawnmower.py DD_Caldera_Expansion.esp grassout2.esp grassout3.esp
-del grassout2.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout3.esp grassout4.esp
-del grassout3.esp
-python lawnmower.py "Clean_Mines & Caverns.esp" grassout4.esp newWG.esp
-del grassout4.esp
-
-REM rivers
-python lawnmower.py Morrowind.esm GENERATED_Grass_RI.esp grassout1.esp
-del newRI.esp
-python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
-del grassout1.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout2.esp newRI.esp
+python lawnmower.py grassblocker_TR.ESP grassout2.esp newTRAC.esp
 del grassout2.esp
 
-REM seas
-python lawnmower.py Morrowind.esm GENERATED_Grass_SE.esp grassout1.esp
-del newSE.esp
-python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
+REM Tamriel Rebuilt - AL
+python lawnmower.py TR_Mainland.esm GENERATED_Grass_TR_AL.esp grassout1.esp
+del newTRAL.esp
+python lawnmower.py TR_merged_az.esm grassout1.esp grassout2.esp
 del grassout1.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout2.esp newSE.esp
+python lawnmower.py grassblocker_TR.ESP grassout2.esp newTRAL.esp
 del grassout2.esp
+
+REM Tamriel Rebuilt - AI
+python lawnmower.py TR_Mainland.esm GENERATED_Grass_TR_AI.esp grassout1.esp
+del newTRAI.esp
+python lawnmower.py TR_merged_az.esm grassout1.esp grassout2.esp
+del grassout1.esp
+python lawnmower.py grassblocker_TR.ESP grassout2.esp newTRAI.esp
+del grassout2.esp
+
+REM Tamriel Rebuilt - BC
+python lawnmower.py TR_Mainland.esm GENERATED_Grass_TR_BC.esp grassout1.esp
+del newTRBC.esp
+python lawnmower.py TR_merged_az.esm grassout1.esp grassout2.esp
+del grassout1.esp
+python lawnmower.py grassblocker_TR.ESP grassout2.esp newTRBC.esp
+del grassout2.esp
+
+REM Tamriel Rebuilt - GL
+python lawnmower.py TR_Mainland.esm GENERATED_Grass_TR_GL.esp grassout1.esp
+del newTRGL.esp
+python lawnmower.py TR_merged_az.esm grassout1.esp grassout2.esp
+del grassout1.esp
+python lawnmower.py grassblocker_TR.ESP grassout2.esp newTRGL.esp
+del grassout2.esp
+
+
+REM Tamriel Rebuilt - WG
+python lawnmower.py TR_Mainland.esm GENERATED_Grass_TR_WG.esp grassout1.esp
+del newTRWG.esp
+python lawnmower.py TR_merged_az.esm grassout1.esp grassout2.esp
+del grassout1.esp
+python lawnmower.py grassblocker_TR.ESP grassout2.esp newTRWG.esp
+del grassout2.esp
+
+REM Tamriel Rebuilt - RR
+python lawnmower.py TR_Mainland.esm GENERATED_Grass_TR_RR.esp grassout1.esp
+del newTRRR.esp
+python lawnmower.py TR_merged_az.esm grassout1.esp grassout2.esp
+del grassout1.esp
+python lawnmower.py grassblocker_TR.ESP grassout2.esp newTRRR.esp
+del grassout2.esp
+
+REM Tamriel Rebuilt - AT
+python lawnmower.py TR_Mainland.esm GENERATED_Grass_TR_AT.esp grassout1.esp
+del newTRAT.esp
+python lawnmower.py TR_merged_az.esm grassout1.esp grassout2.esp
+del grassout1.esp
+python lawnmower.py grassblocker_TR.ESP grassout2.esp newTRAT.esp
+del grassout2.esp
+
+REM Tamriel Rebuilt - rivers
+python lawnmower.py TR_Mainland.esm GENERATED_Grass_TR_RI.esp grassout1.esp
+del newTRRI.esp
+python lawnmower.py TR_merged_az.esm grassout1.esp newTRRI.esp
+del grassout1.esp
+
+REM Tamriel Rebuilt - seas
+python lawnmower.py TR_Mainland.esm GENERATED_Grass_TR_SE.esp grassout1.esp
+del newTRSE.esp
+python lawnmower.py TR_merged_az.esm grassout1.esp newTRSE.esp
+del grassout1.esp
+
