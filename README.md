@@ -18,7 +18,8 @@ Lawnmower will take an input esp/esm file, a grass mod, and an output file as co
 
 `python lawnmower.py "Vivec_Lighthouse.ESP" "grassout1.esp" "grassout2.esp"`
 
-`python lawnmower.py "autoclean_cities_vanilla.esp" "grassout2.esp" "grassout3.esp"`  <---- NEW IN V1.4: CLEAN OUT ALL VANILLA CITIES AND OTHER DIFFICULT SPOTS AUTOMATICALLY WITH INCLUDED PATCH
+NEW IN V1.4: CLEAN OUT ALL VANILLA CITIES, TOWNS AND OTHER DIFFICULT SPOTS AUTOMATICALLY WITH INCLUDED PATCH:
+`python lawnmower.py "autoclean_cities_vanilla.esp" "grassout2.esp" "grassout3.esp"`  
 
 `python lawnmower.py "Beautiful cities of morrowind.esp" "grassout3.esp" "shinynewnoclipgrassplugin.esp"`
 
