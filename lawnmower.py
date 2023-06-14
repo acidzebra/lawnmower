@@ -1,5 +1,5 @@
 # The LawnMower for Morrowind
-version = "1.5.1"
+version = "1.5.2"
 #
 # automatically clean all clipping grass from your Morrowind grass mods, no more grass sticking through floors and other places it doesn't belong.
 # it is a little rough and there is very little handholding or much in the way of sanity checks. But it works.
@@ -14,21 +14,25 @@ version = "1.5.1"
 # 1.2 - removed leftover debug stuff, fixed radius select loop
 # 1.3 - further simplification, reduced amount of stuff to evaluate during loops
 # 1.4 - refinement of radius lists, code cleanup and optimization, added nograss_xxl for easier city cleaning using grassblocker, added autoclean_cities_vanilla.esp for cleaning stuff in vanilla that lawnmower can't reach by itself
-# 1.5 - rewrote ref matching loops + bugfixes, futher refinement of radius lists, reduced memory use, minor changes to file loading
+# 1.5 - rewrote ref matching loops + bugfixes, futher refinement of radius lists, reduced memory use, minor changes to file loading, added autoclean_cities_TR.esp for cleaning cities and villages in TR
 # 1.5.1 - removed "furn" from smalllists (now default radius), added step to delete json before start if deletemodjson = True
+# 1.5.2 - updated grassblocker meshes to better match radii set here, added check to avoid writing file when no changes are made, added a little more detail to final report, made quieter when moreinfo=False, added overwrite switch, added Creatures mod stuff to skiplists
 
 # START OF USER-CONFIGURABLE STUFF
 
 # moreinfo mode spits out more messages, defaults to True
-moreinfo = True
+moreinfo = False
 # delete the mod .json file after generation? Default True, set to False to speed up batch operations (json file will be reused). 
 # DON'T FORGET TO TURN THIS OFF IF YOU'VE MADE CHANGES TO A MOD IN BETWEEN RUNNING LAWNMOWER.
 deletemodjson = True
 # radius to cut grass around mesh if no overrides on basis of refID, default 220.00
 defaultradius = 220.00
+# overwrite existing files? (normal behavior is to rename original grassfile to grassfile.00x.esp)
+overwrite = False
+
 
 # radius control, the more things in these lists, the slower things go. This is a decent set and seems to catch vanilla/TR/OAAB/etc stuff pretty well.
-skiplist = ["bridge","invis","collis","smoke","log","wreck","ship","boat","plank","light_de","sound","teleport","trigger","thiefdoor","_ward_","steam","beartrap","marker","fauna","fx","forcefield","ranched","scrib","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk","terrain_rock_wg_06","terrain_rock_wg_04","terrain_rock_wg_11","terrain_rock_wg_13"]
+skiplist = ["bridge","invis","collis","smoke","log","wreck","ship","boat","plank","light_de","sound","teleport","trigger","thiefdoor","_ward_","steam","beartrap","marker","fauna","fx","forcefield","ranched","scrib","rp_","plx_","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk","terrain_rock_wg_06","terrain_rock_wg_04","terrain_rock_wg_11","terrain_rock_wg_13"]
 smalllist = ["tree","parasol","railing","flora","dwrv_block","rubble","nograss_small","plant","pole"]
 largelist = ["strongh","pylon","portal","ex_velothi","entrance","_talker","entr_","terrwater","necrom","temple","fort","doomstone","lava","canton","altar","palace","tower","_keep","fire","tent","statue","nograss_large","striderport","bcom_gnisis_rock","terrain_rock_wg_09","terrain_rock_wg_10","terrain_rock_wg_12"]
 mediumlist = ["ex_","house","building","shack","ruin","bw_hlaal","door","_d_","docks","gate","grate","waterfall","_x_","well","dae","stair","steps","bazaar","platf","tomb","exit","harbor","shrine","menhir","nograss_medium","pillar","terrain_rock_rm_12","terrain_rock_wg_05","terrain_rock_wg_07","terrain_rock_wg_08","terrain_rock_ac_10","terrain_rock_ac_11","terrain_rock_ac_12"]
@@ -82,7 +86,8 @@ if not os.path.isfile("tes3conv.exe"):
     print("FATAL: cannot find path to tes3conv.exe, is it in the same folder as this script?")
     sys.exit()
 
-print("Lawnmower for Morrowind",str(version),"by acidzebra: grass go brrrr")
+if moreinfo:
+    print("Lawnmower for Morrowind",str(version),"by acidzebra: grass go brrrr")
 
 jsonmodname = modinputfile[:-4]+".json"
 if deletemodjson and os.path.isfile(str(jsonmodname)):
@@ -136,7 +141,7 @@ grasskillcount = 0
 grasskilltotalcount = 0
 extcellcount = 0
 matchcellcount = 0
-
+changesmade = False
 if moreinfo:
     print("examining grass file...")
 for keys in grassfile_parsed_json:
@@ -173,6 +178,7 @@ for keys in grassfile_parsed_json:
                                         break
                                 matchitem = False 
                                 if refs["translation"][2] != -200000 and not skipitem and is_clipping(comparerefs["translation"][0],comparerefs["translation"][1],radius,refs["translation"][0],refs["translation"][1]):
+                                    changesmade = True
                                     refs["translation"][0] = 0
                                     refs["translation"][1] = 0
                                     refs["translation"][2] = -200000
@@ -193,22 +199,28 @@ for keys in grassfile_parsed_json:
     grasskillcount=0
     radius = defaultradius
 
-try:
-    if moreinfo:
-        print("finished examination, writing json file")
-    with open('export.json', 'w', encoding='utf-8') as f:
-        json.dump(exportfile, f, ensure_ascii=False, indent=4)
-    if moreinfo:
-        print("converting final json file to "+str(lwnmwroutputfile))
-    target = "tes3conv.exe export.json \""+str(lwnmwroutputfile)+"\""
-    os.system(target)
-    f.close()
-    os.remove("export.json")
-except Exception as e:
-    print("FATAL: unable to convert finished grass to esp: "+repr(e))
-    sys.exit()
+if changesmade:
+    try:
+        if moreinfo:
+            print("finished examination, writing json file")
+        with open('export.json', 'w', encoding='utf-8') as f:
+            json.dump(exportfile, f, ensure_ascii=False, indent=4)
+        if moreinfo:
+            print("converting final json file to "+str(lwnmwroutputfile))
+        if overwrite:
+            target = "tes3conv.exe -o export.json \""+str(lwnmwroutputfile)+"\""
+        else:
+            target = "tes3conv.exe export.json \""+str(lwnmwroutputfile)+"\""
+        os.system(target)
+        f.close()
+        os.remove("export.json")
+    except Exception as e:
+        print("FATAL: unable to convert finished grass to esp: "+repr(e))
+        sys.exit()
 
-print("lawnmower evaluated "+str(extcellcount)+" exterior cells in the grass file and found "+str(matchcellcount)+" matching cells in the mod file, inspecting "+str(grasstotalcount)+" grass references and removing "+str(grasskilltotalcount)+" clipping ones. Enjoy your clean countryside!")
+    print("lawnmower evaluated "+str(extcellcount)+" exterior cells in "+str(grassinputfile)+" and found "+str(matchcellcount)+" matching cells in "+str(modinputfile)+", inspecting "+str(grasstotalcount)+" grass references and removing "+str(grasskilltotalcount)+" clipping ones. Enjoy your clean countryside!")
+else:
+    print("lawnmower made no modifications after examining "+str(extcellcount)+" exterior cells in "+str(grassinputfile)+" and "+str(matchcellcount)+" matching cells in "+str(modinputfile))
 
 # Copyright © 2023 acidzebra
 
