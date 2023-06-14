@@ -21,7 +21,7 @@ version = "1.5.2"
 # START OF USER-CONFIGURABLE STUFF
 
 # moreinfo mode spits out more messages, defaults to True
-moreinfo = False
+moreinfo = True
 # delete the mod .json file after generation? Default True, set to False to speed up batch operations (json file will be reused). 
 # DON'T FORGET TO TURN THIS OFF IF YOU'VE MADE CHANGES TO A MOD IN BETWEEN RUNNING LAWNMOWER.
 deletemodjson = True
