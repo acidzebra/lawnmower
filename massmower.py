@@ -1,5 +1,5 @@
 # The MassMower for Morrowind
-version = "0.1"
+version = "0.2"
 #
 # DANGER DANGER DANGER
 # NOT READY FOR PRODUCTION AND NO DOCUMENTATION PROVIDED
@@ -23,8 +23,7 @@ import gc
 grassmodlist = []
 modlist = []
 esplist = []
-excludelist = ["TR_Data.esm","TR_Mainland.esm","TR_Mainland_21.esm","Tamriel_Data.esm","TR_merged_az.esm","Cyr_Main.esm","BCOM_mergedmaster.esm","Sky_Main.esm","TR_Preview_21.esp"]
-reverse_exclude = False
+excludelist = ["TR_Mainland_21.esm","TR_Preview_21.esp","BCOM_mergedmaster.esm","Creatures.esp","bcsounds.esp","Bloodmoon.esm","Cyr_Main.esm"]
 
 def is_in_list(myrefid, reflist):
     if any(searchterm in myrefid for searchterm in reflist):
@@ -38,7 +37,6 @@ try:
 except:
     print("usage: python massmower.py \"target directory\"")
     sys.exit()
-    
 
 if not os.path.isdir(target_folder):
     print("FATAL: target directory \"",target_folder,"\"does not exist.")
@@ -54,21 +52,13 @@ from os.path import isfile, join
 esplist += [each for each in os.listdir(target_folder) if each.endswith('.esm'.casefold())]
 esplist += [each for each in os.listdir(target_folder) if each.endswith('.esp'.casefold())]
 
-
-def hasgrass(myrefid, reflist):
-    if any("GRS" in myrefid for searchterm in reflist):
-        return True
-    else:
-        return False
-
-#print(esplist)
-#sys.exit()
 filecounter = 1
 grassmodcounter =0
 normalmodcounter=0
-checkedmod = 0
+checkedmod = False
+fatalerror = False
 for files in esplist:
-    #print(files)
+
     if files not in excludelist:
         jsonfilename = files[:-4]+".json"
         if deletemodjson and os.path.isfile(str(jsonfilename)):
@@ -76,7 +66,7 @@ for files in esplist:
         if not os.path.isfile(str(jsonfilename)):
             try:
                 target = "tes3conv.exe \""+str(files)+"\" \""+str(jsonfilename)+"\""
-                print(target)
+                print("running",target)
                 os.system(target)
             except Exception as e:
                 print("FATAL: unable to convert mod to json: "+repr(e)) 
@@ -92,51 +82,48 @@ for files in esplist:
         print("examining file",filecounter,"of",len(esplist),":",files)
         grasscounter = 0
         for keys in modfile_parsed_json:
-            #print(keys)
-            # not a cell
             if keys["type"] != "Cell":
                 pass
-            # not an external cell
             elif (keys["data"]["grid"][0] > 512 or keys["data"]["grid"][1] > 512):
                 pass
-            # external cell and not a junk cell
             elif len(keys["references"])>0:
-                # go through all keys
                 for refs in keys["references"]:
                     #print(refs)
-                    if "GRS" in refs["id"] and (files not in excludelist) and checkedmod == 0:
+                    if "GRS" in refs["id"] and (files not in excludelist) and not checkedmod:
                         grasscounter+=1
-                        checkedmod = 1
+                        checkedmod = True
                     else:
-                        if (files not in excludelist) and checkedmod == 0:
+                        if (files not in excludelist) and not checkedmod:
                             normalmodcounter+=1
                             modlist.append(files)
-                            checkedmod = 1
+                            checkedmod = True
+                    if checkedmod:
+                        break
         checkedmod = 0
         filecounter+=1
         if grasscounter > 0:
             grassmodlist.append(files)
             grassmodcounter+=1
-            #print(files,"is a grassmod with",grasscounter,"GRS")
-
-print("Total of",grassmodcounter,"grassmods found:",grassmodlist)
-print("Total of",normalmodcounter,"other mods with exterior cell changes found:",modlist)
+    else:
+        print("skipping file",filecounter,"of",len(esplist),":",files,"(excludelist)")
+        filecounter+=1
+        
+print("\nTotal of",str(grassmodcounter),"grassmods found:",str(grassmodlist))
+print("\nTotal of",str(normalmodcounter),"other mods with exterior cell changes found:",str(modlist))
 Prompt = None
-# Loop until the user inputs a valid answer
-state = 0
+
+gogogo = 0
 while True:
-    Prompt = input("Do you wish to continue? answer y or n\n")
-    if Prompt in ['y', 'yes']:
-        state = 1 # switch state to processing state
+    prompt = input("\nReview the above, does it look correct? (answer y or n):\n")
+    if prompt in ['y', 'yes']:
+        gogogo = 1
         break
-    elif Prompt in ['n', 'no']:
+    elif prompt in ['n', 'no']:
         break
 
-if state == 0:
+if gogogo == 0:
     print("breaking off at user request")
     sys.exit()
-
-print("gogogo")
 
 for mods in modlist:
     for grassmods in grassmodlist:
