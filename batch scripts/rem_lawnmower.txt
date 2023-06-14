@@ -1,67 +1,103 @@
-REM python lawnmower.py Morrowind.esm Rem_AC.esp grassout1.esp
-REM python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp Rem_AC_lawnmowered.esp
-REM del grassout1.esp
-
-REM python lawnmower.py Morrowind.esm Rem_AI.esp grassout1.esp
-REM python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp Rem_AI_lawnmowered.esp
-REM del grassout1.esp
-
-REM python lawnmower.py Morrowind.esm Rem_AL.esp grassout1.esp
-REM python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp Rem_AL_lawnmowered.esp
-REM del grassout1.esp
-
-REM python lawnmower.py Morrowind.esm Rem_BC.esp grassout1.esp
-REM python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp Rem_BC_lawnmowered.esp
-REM del grassout1.esp
-
-REM python lawnmower.py Morrowind.esm Rem_GL.esp grassout1.esp
-REM python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp Rem_GL_lawnmowered.esp
-REM del grassout1.esp
-
-REM python lawnmower.py Morrowind.esm Rem_WG.esp grassout1.esp
-REM python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp Rem_WG_lawnmowered.esp
-REM del grassout1.esp
-
-REM python lawnmower.py TR_Mainland_21.esm Rem_AC_TR.esp grassout1.esp
-REM python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_AC_TR_lawnmowered.esp
-REM del grassout1.esp
-
-REM python lawnmower.py TR_Mainland_21.esm Rem_AI_TR.esp grassout1.esp
-REM python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_AI_TR_lawnmowered.esp
-REM del grassout1.esp
-
-REM python lawnmower.py TR_Mainland_21.esm Rem_AL_TR.esp grassout1.esp
-REM python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_AL_TR_lawnmowered.esp
-REM del grassout1.esp
-
+python lawnmower.py Morrowind.esm Rem_AC.esp grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout2.esp Rem_AC.esp
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py Morrowind.esm Rem_AI.esp grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout2.esp Rem_AI.esp
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py Morrowind.esm Rem_AL.esp grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout2.esp Rem_AL.esp
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py Morrowind.esm Rem_BC.esp grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout2.esp Rem_BC.esp
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py Morrowind.esm Rem_GL.esp grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout2.esp Rem_GL.esp
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py Morrowind.esm Rem_WG.esp grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout2.esp Rem_WG.esp
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py TR_Mainland_21.esm Rem_AC_TR.esp grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp grassout2.esp
+python lawnmower.py autoclean_cities_TR.ESP grassout2.esp Rem_AC_TR.esp
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py TR_Mainland_21.esm Rem_AI_TR.esp grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp grassout2.esp
+python lawnmower.py autoclean_cities_TR.ESP grassout2.esp Rem_AI_TR.esp
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py TR_Mainland_21.esm Rem_AL_TR.esp grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp grassout2.esp
+python lawnmower.py autoclean_cities_TR.ESP grassout2.esp Rem_AL_TR.esp
+del grassout1.esp
+del grassout2.esp
 python lawnmower.py TR_Mainland_21.esm Rem_AT_TR.esp grassout1.esp
-python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_AT_TR_lawnmowered.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp grassout2.esp
+python lawnmower.py autoclean_cities_TR.ESP grassout2.esp Rem_AT_TR.esp
 del grassout1.esp
-
+del grassout2.esp
 python lawnmower.py TR_Mainland_21.esm Rem_BC_TR.esp grassout1.esp
-python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_BC_TR_lawnmowered.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp grassout2.esp
+python lawnmower.py autoclean_cities_TR.ESP grassout2.esp Rem_BC_TR.esp
 del grassout1.esp
-
+del grassout2.esp
 python lawnmower.py TR_Mainland_21.esm Rem_GL_TR.esp grassout1.esp
-python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_GL_TR_lawnmowered.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp grassout2.esp
+python lawnmower.py autoclean_cities_TR.ESP grassout2.esp Rem_GL_TR.esp
 del grassout1.esp
-
+del grassout2.esp
 python lawnmower.py TR_Mainland_21.esm Rem_RR_TR.esp grassout1.esp
-python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_RR_TR_lawnmowered.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp grassout2.esp
+python lawnmower.py autoclean_cities_TR.ESP grassout2.esp Rem_RR_TR.esp
 del grassout1.esp
-
+del grassout2.esp
 python lawnmower.py TR_Mainland_21.esm Rem_TR_AT.esp grassout1.esp
-python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_TR_AT_lawnmowered.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp grassout2.esp
+python lawnmower.py autoclean_cities_TR.ESP grassout2.esp Rem_TR_AT.esp
 del grassout1.esp
-
+del grassout2.esp
 python lawnmower.py TR_Mainland_21.esm Rem_VM_TR.esp grassout1.esp
-python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_VM_TR_lawnmowered.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp grassout2.esp
+python lawnmower.py autoclean_cities_TR.ESP grassout2.esp Rem_VM_TR.esp
 del grassout1.esp
-
+del grassout2.esp
 python lawnmower.py TR_Mainland_21.esm Rem_WG_TR.esp grassout1.esp
-python lawnmower.py TR_Preview_21.esp grassout1.esp Rem_WG_TR_lawnmowered.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp grassout2.esp
+python lawnmower.py autoclean_cities_TR.ESP grassout2.esp Rem_WG_TR.esp
 del grassout1.esp
-
+del grassout2.esp
 python lawnmower.py Bloodmoon.esm Rem_Solstheim.esp grassout1.esp
-python lawnmower.py "Solstheim Tomb of The Snow Prince.esm" grassout1.esp Rem_Solstheim_lawnmowered.esp
+python lawnmower.py "Solstheim Tomb of The Snow Prince.esm" grassout1.esp Rem_Solstheim.esp
 del grassout1.esp
+python lawnmower.py TR_Mainland_21.esm Rem_TRp_AT.esp grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp grassout2.esp
+python lawnmower.py autoclean_cities_TR.ESP grassout2.esp Rem_TRp_AT.esp
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py TR_Mainland_21.esm Rem_TRp_RR.esp grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp grassout2.esp
+python lawnmower.py autoclean_cities_TR.ESP grassout2.esp Rem_TRp_RR.esp
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py TR_Mainland_21.esm Rem_TRp_TV.esp grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp grassout2.esp
+python lawnmower.py autoclean_cities_TR.ESP grassout2.esp Rem_TRp_TV.esp
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py TR_Mainland_21.esm Rem_TRp_GM.esp grassout1.esp
+python lawnmower.py TR_Preview_21.esp grassout1.esp grassout2.esp
+python lawnmower.py autoclean_cities_TR.ESP grassout2.esp Rem_TRp_GM.esp
+del grassout1.esp
+del grassout2.esp

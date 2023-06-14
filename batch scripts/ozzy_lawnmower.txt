@@ -1,0 +1,28 @@
+python lawnmower.py Morrowind.esm "Ozzy's Grass - Ascadian Isles.esp" grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout2.esp "Ozzy's Grass - Ascadian Isles.esp"
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py Morrowind.esm "Ozzy's Grass - Bitter Coast.esp" grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout2.esp "Ozzy's Grass - Bitter Coast.esp"
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py Morrowind.esm "Ozzy's Grass - Grazelands.esp" grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout2.esp "Ozzy's Grass - Grazelands.esp"
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py Morrowind.esm "Ozzy's Grass - West Gash.esp" grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout2.esp "Ozzy's Grass - West Gash.esp"
+del grassout1.esp
+del grassout2.esp
+python lawnmower.py Bloodmoon.esm "Ozzy's Grass - Solstheim.esp" grassout1.esp
+python lawnmower.py "Solstheim Tomb of The Snow Prince.esm" grassout1.esp "Ozzy's Grass - Solstheim.esp"
+del grassout1.esp
+python lawnmower.py Morrowind.esm "Ozzy's Grass - Ascadian Isles.esp" grassout1.esp
+python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout2.esp "Ozzy's Grass - Ascadian Isles.esp"
+del grassout1.esp
+del grassout2.esp

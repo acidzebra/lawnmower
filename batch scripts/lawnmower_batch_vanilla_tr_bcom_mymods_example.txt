@@ -5,7 +5,7 @@ del grassout1.esp
 del newAI.esp
 python lawnmower.py "Beautiful cities of morrowind.esp" grassout2.esp grassout3.esp
 del grassout2.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout3.esp grassout4.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout3.esp grassout4.esp
 del grassout3.esp
 python lawnmower.py "Clean_Mines & Caverns.esp" grassout4.esp grassout5.esp
 del grassout4.esp
@@ -21,7 +21,7 @@ del grassout2.esp
 del newAC.esp
 python lawnmower.py "OAAB_Tel Mora.ESP" grassout3.esp grassout4.esp
 del grassout3.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout4.esp grassout5.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout4.esp grassout5.esp
 del grassout4.esp
 python lawnmower.py "Clean_Mines & Caverns.esp" grassout5.esp newAC.esp
 del grassout5.esp
@@ -41,7 +41,7 @@ python lawnmower.py "Baan_Binif.ESP" grassout5.esp grassout6.esp
 del grassout5.esp
 python lawnmower.py "Clean_Mines & Caverns.esp" grassout6.esp grassout7.esp
 del grassout6.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout7.esp newAL.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout7.esp newAL.esp
 del grassout7.esp
 
 REM Bitter Coast
@@ -51,7 +51,7 @@ python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.
 del grassout1.esp
 python lawnmower.py "Clean_Mines & Caverns.esp" grassout2.esp grassout3.esp
 del grassout2.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout3.esp newBC.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout3.esp newBC.esp
 del grassout3.esp
 
 
@@ -68,7 +68,7 @@ python lawnmower.py "Dunmer Stronghold - Falensarano V1.0.esp" grassout4.esp gra
 del grassout4.esp
 python lawnmower.py "Clean_Mines & Caverns.esp" grassout5.esp grassout6.esp
 del grassout5.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout6.esp newGL.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout6.esp newGL.esp
 del grassout6.esp
 
 REM West Gash
@@ -78,7 +78,7 @@ del grassout1.esp
 del newWG.esp
 python lawnmower.py DD_Caldera_Expansion.esp grassout2.esp grassout3.esp
 del grassout2.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout3.esp grassout4.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout3.esp grassout4.esp
 del grassout3.esp
 python lawnmower.py "Clean_Mines & Caverns.esp" grassout4.esp newWG.esp
 del grassout4.esp
@@ -88,7 +88,7 @@ python lawnmower.py Morrowind.esm GENERATED_Grass_RI.esp grassout1.esp
 del newRI.esp
 python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
 del grassout1.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout2.esp newRI.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout2.esp newRI.esp
 del grassout2.esp
 
 REM seas
@@ -96,5 +96,5 @@ python lawnmower.py Morrowind.esm GENERATED_Grass_SE.esp grassout1.esp
 del newSE.esp
 python lawnmower.py "Beautiful cities of morrowind.esp" grassout1.esp grassout2.esp
 del grassout1.esp
-python lawnmower.py "grassblocker_vanilla.esp" grassout2.esp newSE.esp
+python lawnmower.py "autoclean_cities_vanilla.esp" grassout2.esp newSE.esp
 del grassout2.esp
