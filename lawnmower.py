@@ -1,5 +1,5 @@
 # The LawnMower for Morrowind
-version = "1.5"
+version = "1.5.1"
 #
 # automatically clean all clipping grass from your Morrowind grass mods, no more grass sticking through floors and other places it doesn't belong.
 # it is a little rough and there is very little handholding or much in the way of sanity checks. But it works.
@@ -15,6 +15,7 @@ version = "1.5"
 # 1.3 - further simplification, reduced amount of stuff to evaluate during loops
 # 1.4 - refinement of radius lists, code cleanup and optimization, added nograss_xxl for easier city cleaning using grassblocker, added autoclean_cities_vanilla.esp for cleaning stuff in vanilla that lawnmower can't reach by itself
 # 1.5 - rewrote ref matching loops + bugfixes, futher refinement of radius lists, reduced memory use, minor changes to file loading
+# 1.5.1 - removed "furn" from smalllists (now default radius), added step to delete json before start if deletemodjson = True
 
 # START OF USER-CONFIGURABLE STUFF
 
@@ -28,7 +29,7 @@ defaultradius = 220.00
 
 # radius control, the more things in these lists, the slower things go. This is a decent set and seems to catch vanilla/TR/OAAB/etc stuff pretty well.
 skiplist = ["bridge","invis","collis","smoke","log","wreck","ship","boat","plank","light_de","sound","teleport","trigger","thiefdoor","_ward_","steam","beartrap","marker","fauna","fx","forcefield","ranched","scrib","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk","terrain_rock_wg_06","terrain_rock_wg_04","terrain_rock_wg_11","terrain_rock_wg_13"]
-smalllist = ["tree","parasol","railing","flora","dwrv_block","rubble","nograss_small","plant","pole","furn"]
+smalllist = ["tree","parasol","railing","flora","dwrv_block","rubble","nograss_small","plant","pole"]
 largelist = ["strongh","pylon","portal","ex_velothi","entrance","_talker","entr_","terrwater","necrom","temple","fort","doomstone","lava","canton","altar","palace","tower","_keep","fire","tent","statue","nograss_large","striderport","bcom_gnisis_rock","terrain_rock_wg_09","terrain_rock_wg_10","terrain_rock_wg_12"]
 mediumlist = ["ex_","house","building","shack","ruin","bw_hlaal","door","_d_","docks","gate","grate","waterfall","_x_","well","dae","stair","steps","bazaar","platf","tomb","exit","harbor","shrine","menhir","nograss_medium","pillar","terrain_rock_rm_12","terrain_rock_wg_05","terrain_rock_wg_07","terrain_rock_wg_08","terrain_rock_ac_10","terrain_rock_ac_11","terrain_rock_ac_12"]
 xllist = ["nograss_xl"]
@@ -84,6 +85,8 @@ if not os.path.isfile("tes3conv.exe"):
 print("Lawnmower for Morrowind",str(version),"by acidzebra: grass go brrrr")
 
 jsonmodname = modinputfile[:-4]+".json"
+if deletemodjson and os.path.isfile(str(jsonmodname)):
+    os.remove(jsonmodname)
 if not os.path.isfile(str(jsonmodname)):
     if moreinfo:
         print("converting mod file to JSON...")
