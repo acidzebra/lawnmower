@@ -1,10 +1,11 @@
 # The MassMower for Morrowind
-version = "0.2"
+version = "0.3"
 #
 # DANGER DANGER DANGER
 # NOT READY FOR PRODUCTION AND NO DOCUMENTATION PROVIDED
 # NO GUARDRAILS, NO SAFETIES, NO CRYING
 
+# TODO ADD INFO HERE
 
 # START OF USER-CONFIGURABLE STUFF
 
@@ -23,18 +24,15 @@ import gc
 grassmodlist = []
 modlist = []
 esplist = []
-excludelist = ["TR_Mainland_21.esm","TR_Preview_21.esp","BCOM_mergedmaster.esm","Creatures.esp","bcsounds.esp","Bloodmoon.esm","Cyr_Main.esm"]
-
-def is_in_list(myrefid, reflist):
-    if any(searchterm in myrefid for searchterm in reflist):
-        return True
-    else:
-        return False
+excludedmodlist = []
+# TODO make a sane default list to speed stuff up
+excludelist = ["TR_Mainland_21.esm","TR_Preview_21.esp","BCOM_mergedmaster.esm","Creatures.esp","bcsounds.esp","Cyr_Main.esm","Cyrodiil_Grass.ESP","Sky_Main_Grass.esp","Sky_Main.esm","Tamriel_Data.esm","TR_Data.esm"]
 
 try:
     target_folder = sys.argv[1]
     target_folder = str(target_folder)
 except:
+# TODO explain this better
     print("usage: python massmower.py \"target directory\"")
     sys.exit()
 
@@ -45,12 +43,20 @@ if not os.path.isdir(target_folder):
 if not os.path.isfile("tes3conv.exe"):
     print("FATAL: cannot find path to tes3conv.exe, is it in the same folder as this script?")
     sys.exit()
-
+    
+if not os.path.isfile("lawnmower.py"):
+    print("FATAL: cannot find path to lawnmower.py, is it in the same folder as this script?")
+    sys.exit()
+    
+    
 from os import listdir
 from os.path import isfile, join
 
-esplist += [each for each in os.listdir(target_folder) if each.endswith('.esm'.casefold())]
-esplist += [each for each in os.listdir(target_folder) if each.endswith('.esp'.casefold())]
+# TODO rewrite this to be case insensitive
+esplist += [each for each in os.listdir(target_folder) if each.endswith('.esm')]
+esplist += [each for each in os.listdir(target_folder) if each.endswith('.ESM')]
+esplist += [each for each in os.listdir(target_folder) if each.endswith('.esp')]
+esplist += [each for each in os.listdir(target_folder) if each.endswith('.ESP')]
 
 filecounter = 1
 grassmodcounter =0
@@ -58,7 +64,6 @@ normalmodcounter=0
 checkedmod = False
 fatalerror = False
 for files in esplist:
-
     if files not in excludelist:
         jsonfilename = files[:-4]+".json"
         if deletemodjson and os.path.isfile(str(jsonfilename)):
@@ -107,9 +112,11 @@ for files in esplist:
     else:
         print("skipping file",filecounter,"of",len(esplist),":",files,"(excludelist)")
         filecounter+=1
+        excludedmodlist.append(files)
         
 print("\nTotal of",str(grassmodcounter),"grassmods found:",str(grassmodlist))
 print("\nTotal of",str(normalmodcounter),"other mods with exterior cell changes found:",str(modlist))
+print("\nExcluded mods:",str(excludedmodlist),"due to being on the exclude list")
 Prompt = None
 
 gogogo = 0
