@@ -1,5 +1,5 @@
 # The LawnMower for Morrowind
-version = "1.5.2"
+version = "1.5.4"
 #
 # automatically clean all clipping grass from your Morrowind grass mods, no more grass sticking through floors and other places it doesn't belong.
 # it is a little rough and there is very little handholding or much in the way of sanity checks. But it works.
@@ -18,6 +18,7 @@ version = "1.5.2"
 # 1.5.1 - removed "furn" from smalllists (now default radius), added step to delete json before start if deletemodjson = True
 # 1.5.2 - updated grassblocker meshes to better match radii set here, added check to avoid writing file when no changes are made, added a little more detail to final report, made quieter when moreinfo=False, added overwrite switch, added Creatures mod stuff to skiplists
 # 1.5.3 - forgot to add interior/exterior check to comparekeys, saves some time to skip. Time we need to extend the search grid for any cell to the eight cells around it to catch edge cases of grass+objects on bordering cells which do clip.
+# 1.5.4 - made the "search eight cells around a cell" for extra accurate cleaning into a new switch: deepclean (default = False). Improved interior detection thanks to a discussion with abot on MMC discord
 
 # START OF USER-CONFIGURABLE STUFF
 
@@ -29,13 +30,14 @@ deletemodjson = False
 # radius to cut grass around mesh if no overrides on basis of refID, default 220.00
 defaultradius = 220.00
 # overwrite existing files? (normal behavior is to rename original grassfile to grassfile.00x.esp)
-overwrite = True
-
+overwrite = False
+# DeepClean will improve lawnmower's accuracy at the cost of speed by inspecting the eight cells surrounding each searched cell to catch edge cases, defaults to False. The difference in most cases is minimal.
+deepclean = True
 
 # radius control, the more things in these lists, the slower things go. This is a decent set and seems to catch vanilla/TR/OAAB/etc stuff pretty well.
 skiplist = ["bridge","invis","collis","log","wreck","ship","boat","mist","sound","teleport","trigger","thiefdoor","steam","beartrap","marker","fauna","fx","forcefield","ranched","scrib","_ase_","rp_","plx_","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk","terrain_rock_wg_06","terrain_rock_wg_04","terrain_rock_wg_11","terrain_rock_wg_13"]
 smalllist = ["tree","parasol","railing","flora","dwrv_block","rubble","nograss_small","plant"]
-largelist = ["strongh","pylon","portal","ex_velothi","entrance","entr_","terrwater","necrom","temple","fort","doomstone","lava","canton","altar","palace","tower","_keep","fire","tent","statue","nograss_large","striderport","bcom_gnisis_rock","terrain_rock_wg_09","terrain_rock_wg_10","terrain_rock_wg_12"]
+largelist = ["strongh","pylon","portal","ex_velothi","entrance","foundation","entr_","terrwater","necrom","temple","fort","doomstone","lava","canton","altar","palace","tower","_keep","fire","tent","statue","nograss_large","striderport","bcom_gnisis_rock","terrain_rock_wg_09","terrain_rock_wg_10","terrain_rock_wg_12"]
 mediumlist = ["ex_","house","building","shack","ruin","bw_hlaal","door","_d_","docks","gate","grate","waterfall","_x_","well","dae","stair","steps","bazaar","platf","tomb","exit","harbor","shrine","menhir","nograss_medium","pillar","terrain_rock_rm_12","terrain_rock_wg_05","terrain_rock_wg_07","terrain_rock_wg_08","terrain_rock_ac_10","terrain_rock_ac_11","terrain_rock_ac_12"]
 xllist = ["nograss_xl"]
 xxllist = ["nograss_xxl"]
@@ -45,7 +47,7 @@ reftable = [skiplist,smalllist,largelist,mediumlist,xllist,xxllist]
 radiustable = [1,120,600,400,1000,2000]
 skiptable = [True,False,False,False,False,False]
 
-# if you want to see what decisions are made about refs set this to True, would recommend to pipe output to a text file
+# if you want to see what decisions are made about refs set one or both of these to True, would recommend to pipe output to a text file (it's a LOT of text)
 debugradiuslist = False
 debugmove = False 
 ### END OF USER-CONFIGURABLE STUFF
@@ -142,6 +144,8 @@ grasskillcount = 0
 grasskilltotalcount = 0
 extcellcount = 0
 matchcellcount = 0
+tempx = 0
+tempy = 0
 changesmade = False
 if moreinfo:
     print("examining grass file...")
@@ -149,22 +153,33 @@ for keys in grassfile_parsed_json:
     if keys["type"] != "Cell":
         exportfile.append(keys)
         exported = True
-    elif (keys["data"]["grid"][0] > 512 or keys["data"]["grid"][1] > 512):
+    elif "INTERIOR" in keys["data"]["flags"]:
         exportfile.append(keys)
         exported = True
     elif len(keys["references"])>0:
         extcellcount+=1
         for comparekeys in modfile_parsed_json:
-            if comparekeys["type"] == "Cell" and (comparekeys["data"]["grid"][0] < 512 and comparekeys["data"]["grid"][1] < 512):
+            if comparekeys["type"] == "Cell" and "INTERIOR" not in comparekeys["data"]["flags"]:
                 x = -1
                 y = -1
                 while x < 2:
                     y=-1
                     while y < 2:
-                        searchgrid = [(comparekeys["data"]["grid"][0]+x),(comparekeys["data"]["grid"][1]+y)]
+                        if not deepclean:
+                            x=0
+                            y=0
+                        searchgrid = []
+                        searchgrid = [int((comparekeys["data"]["grid"][0])+x),(int(comparekeys["data"]["grid"][1])+y)]
+                        if not deepclean:
+                            x = 3
+                            y = 3
+                        #print(searchgrid)
                         if len(comparekeys["references"])>0 and (searchgrid == keys["data"]["grid"]):
                             if moreinfo:
-                                print(grassinputfile,modinputfile,"matched cell",str(keys["data"]["grid"]))
+                                if deepclean:
+                                    print(grassinputfile+" and "+modinputfile+" matched cell "+str(searchgrid)+" searching nearby cell "+str(comparekeys["data"]["grid"]))
+                                else:
+                                    print(grassinputfile+" and "+modinputfile+" matched cell "+str(searchgrid))
                             matchcellcount+=1
                             for refs in keys["references"]:
                                 if refs["translation"][2] != -200000:
@@ -204,7 +219,7 @@ for keys in grassfile_parsed_json:
             exportfile.append(keys)
     if moreinfo:
         if grasskillcount > 0:
-            print("removed "+str(grasskillcount)+" grass references")
+            print("removed "+str(grasskillcount)+" grass references in",str(searchgrid)," for a total of",grasskilltotalcount)
     exported = False
     skipitem = False
     grasskillcount=0
