@@ -1,5 +1,5 @@
 # The LawnMower for Morrowind
-version = "1.5.4"
+version = "1.6"
 #
 # automatically clean all clipping grass from your Morrowind grass mods, no more grass sticking through floors and other places it doesn't belong.
 # it is a little rough and there is very little handholding or much in the way of sanity checks. But it works.
@@ -15,10 +15,7 @@ version = "1.5.4"
 # 1.3 - further simplification, reduced amount of stuff to evaluate during loops
 # 1.4 - refinement of radius lists, code cleanup and optimization, added nograss_xxl for easier city cleaning using grassblocker, added autoclean_cities_vanilla.esp for cleaning stuff in vanilla that lawnmower can't reach by itself
 # 1.5 - rewrote ref matching loops + bugfixes, futher refinement of radius lists, reduced memory use, minor changes to file loading, added autoclean_cities_TR.esp for cleaning cities and villages in TR
-# 1.5.1 - removed "furn" from smalllists (now default radius), added step to delete json before start if deletemodjson = True
-# 1.5.2 - updated grassblocker meshes to better match radii set here, added check to avoid writing file when no changes are made, added a little more detail to final report, made quieter when moreinfo=False, added overwrite switch, added Creatures mod stuff to skiplists
-# 1.5.3 - forgot to add interior/exterior check to comparekeys, saves some time to skip. Time we need to extend the search grid for any cell to the eight cells around it to catch edge cases of grass+objects on bordering cells which do clip.
-# 1.5.4 - made the "search eight cells around a cell" for extra accurate cleaning into a new switch: deepclean (default = False). Improved interior detection thanks to a discussion with abot on MMC discord
+# 1.6 - new config switches, new "deepclean" option to search 8 cells around every cell to detect edge cases (=~8x slower search), improved interior detection, more tweaking of radius lists, improved temp file cleanup handling, updated grassblocker meshes, added check to avoid writing file when no changes are made, more detailed feedback on what lawnmower is doing, minor code fixes
 
 # START OF USER-CONFIGURABLE STUFF
 
@@ -78,6 +75,7 @@ except:
     print("example: python lawnmower.py \"morrowind.esm\" \"lush_synthesis_WG.esp\" \"clean_lush_synthesis_WG.esp\"")
     print("this will compare the grass objects in lush_synthesis_WG against all objects in morrowind.esm and remove any clipping grass, writing the output to clean_lush_synthesis_WG.esp")
     print("you can choose to overwrite the old file if you prefer: lawnmower.py morrowind.esm lush_synthesis_WG.esp lush_synthesis_WG.esp")
+    print("there are additional config option available, open lawnmower.py with a text editor to explore them.")
     sys.exit()
     
 
@@ -177,7 +175,7 @@ for keys in grassfile_parsed_json:
                         if len(comparekeys["references"])>0 and (searchgrid == keys["data"]["grid"]):
                             if moreinfo:
                                 if deepclean:
-                                    print(grassinputfile+" and "+modinputfile+" matched cell "+str(searchgrid)+" searching nearby cell "+str(comparekeys["data"]["grid"]))
+                                    print(grassinputfile+" and "+modinputfile+" matched cell "+str(searchgrid)+" DeepClean is searching nearby cell "+str(comparekeys["data"]["grid"]))
                                 else:
                                     print(grassinputfile+" and "+modinputfile+" matched cell "+str(searchgrid))
                             matchcellcount+=1
@@ -245,7 +243,7 @@ if changesmade:
         sys.exit()
     if deletemodjson and os.path.isfile(str(jsonmodname)):
         os.remove(jsonmodname)
-    print("lawnmower evaluated "+str(extcellcount)+" exterior cells in "+str(grassinputfile)+" and found "+str(matchcellcount)+" matching cells in "+str(modinputfile)+", inspecting "+str(grasstotalcount)+" grass references and removing "+str(grasskilltotalcount)+" clipping ones. Enjoy your clean countryside!")
+    print("lawnmower evaluated "+str(extcellcount)+" exterior cells in "+str(grassinputfile)+" and found "+str(matchcellcount)+" matching cells in "+str(modinputfile)+", inspecting "+str(grasstotalcount)+" grass references and removing "+str(grasskilltotalcount)+" clipping ones. Deepclean was set to "+str(deepclean)+". Enjoy your clean countryside!")
 else:
     print("lawnmower made no modifications after examining "+str(extcellcount)+" exterior cells in "+str(grassinputfile)+" and "+str(matchcellcount)+" matching cells in "+str(modinputfile))
 # Copyright © 2023 acidzebra
