@@ -16,6 +16,7 @@ version = "1.6"
 # 1.4 - refinement of radius lists, code cleanup and optimization, added nograss_xxl for easier city cleaning using grassblocker, added autoclean_cities_vanilla.esp for cleaning stuff in vanilla that lawnmower can't reach by itself
 # 1.5 - rewrote ref matching loops + bugfixes, futher refinement of radius lists, reduced memory use, minor changes to file loading, added autoclean_cities_TR.esp for cleaning cities and villages in TR
 # 1.6 - new config switches, new "deepclean" option to search 8 cells around every cell to detect edge cases (=~8x slower search), improved interior detection, more tweaking of radius lists, improved temp file cleanup handling, updated grassblocker meshes, added check to avoid writing file when no changes are made, more detailed feedback on what lawnmower is doing, minor code fixes
+# 1.6.1 - roll back IS_INTERIOR check, this is a feature in rfuzzo's fork of tes3conv.exe that does not exists in G7's version.
 
 # START OF USER-CONFIGURABLE STUFF
 
@@ -23,13 +24,13 @@ version = "1.6"
 moreinfo = True
 # delete the mod .json file after generation? Default True, set to False to speed up batch operations (json file will be reused). 
 # DON'T FORGET TO TURN THIS OFF IF YOU'VE MADE CHANGES TO A MOD IN BETWEEN RUNNING LAWNMOWER.
-deletemodjson = False
+deletemodjson = True
 # radius to cut grass around mesh if no overrides on basis of refID, default 220.00
 defaultradius = 220.00
 # overwrite existing files? (normal behavior is to rename original grassfile to grassfile.00x.esp)
 overwrite = False
 # DeepClean will improve lawnmower's accuracy at the cost of speed by inspecting the eight cells surrounding each searched cell to catch edge cases, defaults to False. The difference in most cases is minimal.
-deepclean = True
+deepclean = False
 
 # radius control, the more things in these lists, the slower things go. This is a decent set and seems to catch vanilla/TR/OAAB/etc stuff pretty well.
 skiplist = ["bridge","invis","collis","log","wreck","ship","boat","mist","sound","teleport","trigger","thiefdoor","steam","beartrap","marker","fauna","fx","forcefield","ranched","scrib","_ase_","rp_","plx_","_fau_","_cre_","cr_","lvl_","_lev+","_lev-","_cattle","_sleep","_und_","bm_ex_fel","bm_ex_hirf","bm_ex_moem","bm_ex_reav","wolf","bm_ex_isin","bm_ex_riek","kwama","crab","t_sky_stat_","t_sky_rstat","SP_stat_","berserk","terrain_rock_wg_06","terrain_rock_wg_04","terrain_rock_wg_11","terrain_rock_wg_13"]
@@ -151,13 +152,13 @@ for keys in grassfile_parsed_json:
     if keys["type"] != "Cell":
         exportfile.append(keys)
         exported = True
-    elif "INTERIOR" in keys["data"]["flags"]:
+    elif (keys["data"]["grid"][0] > 512 or keys["data"]["grid"][1] > 512):
         exportfile.append(keys)
         exported = True
     elif len(keys["references"])>0:
         extcellcount+=1
         for comparekeys in modfile_parsed_json:
-            if comparekeys["type"] == "Cell" and "INTERIOR" not in comparekeys["data"]["flags"]:
+            if comparekeys["type"] == "Cell" and (comparekeys["data"]["grid"][0] < 512 and comparekeys["data"]["grid"][1] < 512):
                 x = -1
                 y = -1
                 while x < 2:
