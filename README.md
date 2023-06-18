@@ -51,3 +51,11 @@ This can fix floating grass and speed up creating patches - example: you have yo
 Result: no more floating grass in BCOM areas with your favorite grass mod (I do recommend manual inspection and clean afterwards, but it will be much less painful). 
 
 Program speed: very fast
+
+# Using Massmower
+
+You shouldn't use it, it's not ready for production. It works but it's terribly slow and unoptimized. If you do want to use it, edit lawnmower.py and set deletemodjson to False. Have a giant folder with mods + grassmods + lawnmower.py + massmower.py + tes3conv.exe (I just run this in Data Files) - now go to the folder and run
+
+`python massmower.py "path-to-folder-you-dumped-everything-in"`
+
+Massmower will inspect all your files and detect (most) grassmods. It will then present you a list of grassmods and mods in your folder. If something looks off, type n<enter> and the program will quit. You can edit the excludelist in massmower.py to your taste and run again. If everything looks right, type y and enter to let massmower loose. It will compare all mods against all grassmods and clear out grass. It is not optimized at all (no concern whether grassmod+mod have overlapping cells) and will take a LONG time to run.
